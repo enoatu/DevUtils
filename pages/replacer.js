@@ -1,79 +1,38 @@
 import Head from 'next/head'
 import { useState } from 'react'
 
-export default function CombinationsApp() {
+export default function ReplacerApp() {
   const [source, setSource] = useState('')
+  const [pattern, setPattern] = useState('')
+  const [replacement, setReplacement] = useState('')
   const [result, setResult] = useState('')
-  const [num, setNum] = useState(2)
 
-  const permutation = (nums, k) => {
-    let ans = []
-    if (nums.length < k) {
-      return []
-    }
-    if (k === 1) {
-      for (let i = 0; i < nums.length; i++) {
-        ans[i] = [nums[i]]
-      }
-    } else {
-      for (let i = 0; i < nums.length; i++) {
-        let parts = nums.slice(0)
-        parts.splice(i, 1)[0]
-        let row = permutation(parts, k - 1)
-        for (let j = 0; j < row.length; j++) {
-          ans.push([nums[i]].concat(row[j]))
-        }
-      }
-    }
-    return ans
-  }
-
-  const combination = (nums, k) => {
-    let ans = [];
-    if (nums.length < k) {
-      return []
-    }
-    if (k === 1) {
-      for (let i = 0; i < nums.length; i++) {
-        ans[i] = [nums[i]]
-      }
-    } else {
-      for (let i = 0; i < nums.length - k + 1; i++) {
-        let row = combination(nums.slice(i + 1), k - 1);
-        for (let j = 0; j < row.length; j++) {
-          ans.push([nums[i]].concat(row[j]))
-        }
-      }
-    }
-    return ans
-  }
-
-  const display = (source, callBack) => {
-    const array = source.split("\n")
-    const resultArray = callBack(array, num).map(item => item.join(' → ')).sort()
-    const resultText = resultArray.join("\n")
-    setResult(resultText)
+  const replace = () => {
+    setResult(source.replace(pattern, replacement))
   }
 
   return (
     <div className="container">
       <Head>
-        <title>DevUtils | combinations </title>
+        <title>DevUtils | replacer </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1 className="title">combinations</h1>
+        <h1 className="title">replacer</h1>
         <p className="description">Development Utils</p>
         <div>
           <p>source</p>
           <textarea className="source-box" value={source} onChange={e => setSource(e.target.value)}/>
         </div>
         <div>
-          <p>count</p>
-          <input type="number" value={num} onChange={e => setNum(e.target.value)}/>
+          <p>pattern</p>
+          <textarea className="pattern-box" value={pattern} onChange={e => setPattern(e.target.value)}/>
         </div>
-        <button onClick={() => display(source, permutation)}>順列実行</button>
-        <button onClick={() => display(source, combination)}>組み合わせ実行</button>
+        <div>
+          <p>replacement</p>
+          <textarea className="replacement-box" value={replacement} onChange={e => setReplacement(e.target.value)}/>
+        </div>
+        <button onClick={() => replace()}>replace</button>
         <div>
           <textarea className="result-box" value={result} readOnly/>
         </div>
@@ -129,7 +88,14 @@ export default function CombinationsApp() {
           height: 300px;
           width: 300px;
         }
-
+        .pattern-box {
+          height: 30px;
+          width: 300px;
+        }
+        .replacement-box {
+          height: 30px;
+          width: 300px;
+        }
         .result-box {
           height: 300px;
           width: 300px;
