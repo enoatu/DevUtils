@@ -34,7 +34,7 @@ export default function MultiReplacerApp() {
           <p>replacement</p>
           <textarea className="pattern-box" value={pattern} onChange={e => setPattern(e.target.value)}/>
         </div>
-        <button onClick={() => replace()}>replace</button>
+        <button onClick={replace}>replace</button>
         <div>
           <textarea className="result-box" value={result} readOnly/>
         </div>

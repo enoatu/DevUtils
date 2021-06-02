@@ -32,7 +32,7 @@ export default function ReplacerApp() {
           <p>replacement</p>
           <textarea className="replacement-box" value={replacement} onChange={e => setReplacement(e.target.value)}/>
         </div>
-        <button onClick={() => replace()}>replace</button>
+        <button onClick={replace}>replace</button>
         <div>
           <textarea className="result-box" value={result} readOnly/>
         </div>
