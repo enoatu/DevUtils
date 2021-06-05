@@ -4,10 +4,10 @@ import Footer from '@c/Footer'
 
 type Props = {
   children?: ReactNode
-  title?: string
+  title: string
 }
 
-export default function PageContainer({ children, title = 'This is the default title' }: Props) {
+export default function Layout({ children, title = 'This is the default title' }: Props) {
   return (
     <div className="container">
       <Head>

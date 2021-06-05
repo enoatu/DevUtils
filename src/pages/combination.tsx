@@ -1,12 +1,12 @@
 import Head from 'next/head'
 import { useState } from 'react'
 
-export default function CombinationsApp() {
+export default function CombinationApp() {
   const [source, setSource] = useState('')
   const [result, setResult] = useState('')
   const [num, setNum] = useState(2)
 
-  const permutation = (nums, k) => {
+  const permutation = (nums: string[], k: number): string[][] => {
     let ans = []
     if (nums.length < k) {
       return []
@@ -28,7 +28,7 @@ export default function CombinationsApp() {
     return ans
   }
 
-  const combination = (nums, k) => {
+  const combination = (nums: string[], k: number): string[][] => {
     let ans = [];
     if (nums.length < k) {
       return []
@@ -48,7 +48,7 @@ export default function CombinationsApp() {
     return ans
   }
 
-  const display = (source, callBack) => {
+  const display = (callBack: (array: string[], num: number) => string[][]) => {
     const array = source.split("\n")
     const resultArray = callBack(array, num).map(item => item.join(' → ')).sort()
     const resultText = resultArray.join("\n")
@@ -58,7 +58,7 @@ export default function CombinationsApp() {
   return (
     <div className="container">
       <Head>
-        <title>DevUtils | combinations </title>
+        <title>DevUtils | combination </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
@@ -70,10 +70,10 @@ export default function CombinationsApp() {
         </div>
         <div>
           <p>count</p>
-          <input type="number" value={num} onChange={e => setNum(e.target.value)}/>
+          <input type="number" value={num} onChange={e => setNum(parseInt(e.target.value))}/>
         </div>
-        <button onClick={() => display(source, permutation)}>順列実行</button>
-        <button onClick={() => display(source, combination)}>組み合わせ実行</button>
+        <button onClick={() => display(permutation)}>順列実行</button>
+        <button onClick={() => display(combination)}>組み合わせ実行</button>
         <div>
           <textarea className="result-box" value={result} readOnly/>
         </div>

@@ -1,8 +1,8 @@
-import PageContainer from '@c/PageContainer'
+import Layout from '@c/Layout'
 
 export default function Home() {
   return (
-    <PageContainer title="Top">
+    <Layout title="Top">
       <main>
         <h1 className="title">DevUtils</h1>
         <p className="description">Development Utils</p>
@@ -129,6 +129,6 @@ export default function Home() {
           }
         }
      `}</style>
-    </PageContainer>
+    </Layout>
   )
 }
