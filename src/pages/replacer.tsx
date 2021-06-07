@@ -1,5 +1,5 @@
-import Head from 'next/head'
 import { useState } from 'react'
+import Layout from '@c/Layout'
 
 export default function ReplacerApp() {
   const [source, setSource] = useState('')
@@ -11,15 +11,13 @@ export default function ReplacerApp() {
     setResult(source.replace(pattern, replacement))
   }
 
+  const title       = 'replace'
+  const description = 'Development Utils'
   return (
-    <div className="container">
-      <Head>
-        <title>DevUtils | replacer </title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Layout title={title}>
       <main>
-        <h1 className="title">replacer</h1>
-        <p className="description">Development Utils</p>
+        <h1 className="title">{title}</h1>
+        <p className="description">{description}</p>
         <div>
           <p>source</p>
           <textarea className="source-box" value={source} onChange={e => setSource(e.target.value)}/>
@@ -116,6 +114,6 @@ export default function ReplacerApp() {
           box-sizing: border-box;
         }
       `}</style>
-    </div>
+    </Layout>
   )
 }

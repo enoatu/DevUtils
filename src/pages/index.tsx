@@ -1,11 +1,13 @@
 import Layout from '@c/Layout'
 
 export default function Home() {
+  const title       = 'DevUtils'
+  const description = 'Development Utils'
   return (
     <Layout title="Top">
       <main>
-        <h1 className="title">DevUtils</h1>
-        <p className="description">Development Utils</p>
+        <h1 className="title">{title}</h1>
+        <p className="description">{description}</p>
         <div className="grid">
 
           <a href="/replacer" className="card">

@@ -1,32 +1,11 @@
-import Head from 'next/head'
 import { useState } from 'react'
+import Layout from '@c/Layout'
 
-export default function CombinationApp() {
+export default function Combination() {
   const [source, setSource] = useState('')
   const [result, setResult] = useState('')
   const [num, setNum] = useState(2)
-
-  const permutation = (nums: string[], k: number): string[][] => {
-    let ans = []
-    if (nums.length < k) {
-      return []
-    }
-    if (k === 1) {
-      for (let i = 0; i < nums.length; i++) {
-        ans[i] = [nums[i]]
-      }
-    } else {
-      for (let i = 0; i < nums.length; i++) {
-        let parts = nums.slice(0)
-        parts.splice(i, 1)[0]
-        let row = permutation(parts, k - 1)
-        for (let j = 0; j < row.length; j++) {
-          ans.push([nums[i]].concat(row[j]))
-        }
-      }
-    }
-    return ans
-  }
+  const sourceExample = `hoge fuga piyo`
 
   const combination = (nums: string[], k: number): string[][] => {
     let ans = [];
@@ -55,26 +34,23 @@ export default function CombinationApp() {
     setResult(resultText)
   }
 
+  const title       = 'combination'
+  const description = 'Development Utils'
   return (
-    <div className="container">
-      <Head>
-        <title>DevUtils | combination </title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Layout title={title}>
       <main>
-        <h1 className="title">combinations</h1>
-        <p className="description">Development Utils</p>
-        <div>
+        <h1 className="title">{title}</h1>
+        <p className="description">{description}</p>
+        <div className="input-wrapper">
           <p>source</p>
-          <textarea className="source-box" value={source} onChange={e => setSource(e.target.value)}/>
+          <textarea className="source-box" value={source} onChange={e => setSource(e.target.value)} placeholder={sourceExample}/>
         </div>
-        <div>
+        <div className="input-wrapper">
           <p>count</p>
           <input type="number" value={num} onChange={e => setNum(parseInt(e.target.value))}/>
         </div>
-        <button onClick={() => display(permutation)}>順列実行</button>
-        <button onClick={() => display(combination)}>組み合わせ実行</button>
-        <div>
+        <button onClick={() => display(combination)}>go!</button>
+        <div className="input-wrapper">
           <textarea className="result-box" value={result} readOnly/>
         </div>
       </main>
@@ -96,6 +72,7 @@ export default function CombinationApp() {
           flex-direction: column;
           justify-content: center;
           align-items: center;
+          width: 300px;
         }
 
         .title a {
@@ -112,7 +89,7 @@ export default function CombinationApp() {
         .title {
           margin: 0;
           line-height: 1.15;
-          font-size: 4rem;
+          font-size: 3rem;
         }
 
         .title,
@@ -127,12 +104,15 @@ export default function CombinationApp() {
 
         .source-box {
           height: 300px;
-          width: 300px;
+          width: 100%;
         }
 
         .result-box {
           height: 300px;
-          width: 300px;
+          width: 100%;
+        }
+        .input-wrapper {
+          width: 100%;
         }
       `}</style>
 
@@ -150,6 +130,6 @@ export default function CombinationApp() {
           box-sizing: border-box;
         }
       `}</style>
-    </div>
+    </Layout>
   )
 }
