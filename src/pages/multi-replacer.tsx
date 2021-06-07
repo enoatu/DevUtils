@@ -7,10 +7,10 @@ export default function MultiReplacerApp() {
   const [result, setResult] = useState('')
 
   const replace = () => {
-    const patternArray = pattern.split("\n")
+    const patternArray = pattern.split('\n')
     let resultText = source
-    patternArray.forEach(text => {
-      const [pattern, replacement] = text.split(" ")
+    patternArray.forEach((text) => {
+      const [pattern, replacement] = text.split(' ')
       resultText = resultText.replaceAll(pattern, replacement)
     })
     setResult(resultText)
@@ -27,16 +27,24 @@ export default function MultiReplacerApp() {
         <p className="description">Development Utils</p>
         <div>
           <p>source</p>
-          <textarea className="source-box" value={source} onChange={e => setSource(e.target.value)}/>
+          <textarea
+            className="source-box"
+            value={source}
+            onChange={(e) => setSource(e.target.value)}
+          />
         </div>
         <div>
           <p>pattern</p>
           <p>replacement</p>
-          <textarea className="pattern-box" value={pattern} onChange={e => setPattern(e.target.value)}/>
+          <textarea
+            className="pattern-box"
+            value={pattern}
+            onChange={(e) => setPattern(e.target.value)}
+          />
         </div>
         <button onClick={replace}>replace</button>
         <div>
-          <textarea className="result-box" value={result} readOnly/>
+          <textarea className="result-box" value={result} readOnly />
         </div>
       </main>
 

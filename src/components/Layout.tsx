@@ -7,17 +7,20 @@ type Props = {
   title: string
 }
 
-export default function Layout({ children, title = 'This is the default title' }: Props) {
+export default function Layout({
+  children,
+  title = 'This is the default title',
+}: Props) {
   return (
     <div className="container">
       <Head>
-        <title>DevUtils | { title }</title>
+        <title>DevUtils | {title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      { children }
+      {children}
 
-      <Footer/>
+      <Footer />
 
       <style jsx>{`
         .container {
@@ -28,7 +31,6 @@ export default function Layout({ children, title = 'This is the default title' }
           justify-content: center;
           align-items: center;
         }
-
       `}</style>
 
       <style jsx global>{`

@@ -8,7 +8,7 @@ export default function Combination() {
   const sourceExample = `hoge fuga piyo`
 
   const combination = (nums: string[], k: number): string[][] => {
-    let ans = [];
+    let ans = []
     if (nums.length < k) {
       return []
     }
@@ -18,7 +18,7 @@ export default function Combination() {
       }
     } else {
       for (let i = 0; i < nums.length - k + 1; i++) {
-        let row = combination(nums.slice(i + 1), k - 1);
+        let row = combination(nums.slice(i + 1), k - 1)
         for (let j = 0; j < row.length; j++) {
           ans.push([nums[i]].concat(row[j]))
         }
@@ -28,13 +28,15 @@ export default function Combination() {
   }
 
   const display = (callBack: (array: string[], num: number) => string[][]) => {
-    const array = source.split("\n")
-    const resultArray = callBack(array, num).map(item => item.join(' → ')).sort()
-    const resultText = resultArray.join("\n")
+    const array = source.split('\n')
+    const resultArray = callBack(array, num)
+      .map((item) => item.join(' → '))
+      .sort()
+    const resultText = resultArray.join('\n')
     setResult(resultText)
   }
 
-  const title       = 'combination'
+  const title = 'combination'
   const description = 'Development Utils'
   return (
     <Layout title={title}>
@@ -43,15 +45,24 @@ export default function Combination() {
         <p className="description">{description}</p>
         <div className="input-wrapper">
           <p>source</p>
-          <textarea className="source-box" value={source} onChange={e => setSource(e.target.value)} placeholder={sourceExample}/>
+          <textarea
+            className="source-box"
+            value={source}
+            onChange={(e) => setSource(e.target.value)}
+            placeholder={sourceExample}
+          />
         </div>
         <div className="input-wrapper">
           <p>count</p>
-          <input type="number" value={num} onChange={e => setNum(parseInt(e.target.value))}/>
+          <input
+            type="number"
+            value={num}
+            onChange={(e) => setNum(parseInt(e.target.value))}
+          />
         </div>
         <button onClick={() => display(combination)}>go!</button>
         <div className="input-wrapper">
-          <textarea className="result-box" value={result} readOnly/>
+          <textarea className="result-box" value={result} readOnly />
         </div>
       </main>
 

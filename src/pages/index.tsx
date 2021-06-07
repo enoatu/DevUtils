@@ -1,7 +1,7 @@
 import Layout from '@c/Layout'
 
 export default function Home() {
-  const title       = 'DevUtils'
+  const title = 'DevUtils'
   const description = 'Development Utils'
   return (
     <Layout title="Top">
@@ -9,23 +9,16 @@ export default function Home() {
         <h1 className="title">{title}</h1>
         <p className="description">{description}</p>
         <div className="grid">
-
           <a href="/replacer" className="card">
             <h3>Replacer &rarr;</h3>
             <p>Simple Text Replacer For Efficient</p>
           </a>
-          <a
-            href="./combination"
-            className="card"
-          >
+          <a href="./combination" className="card">
             <h3>Combination &rarr;</h3>
             <p>Discover and deploy boilerplate example Next.js projects.</p>
           </a>
 
-          <a
-            href="./multi-replacer"
-            className="card"
-          >
+          <a href="./multi-replacer" className="card">
             <h3>MultiReplacer &rarr;</h3>
             <p>
               Instantly deploy your Next.js site to a public URL with Vercel.
@@ -130,7 +123,7 @@ export default function Home() {
             flex-direction: column;
           }
         }
-     `}</style>
+      `}</style>
     </Layout>
   )
 }
