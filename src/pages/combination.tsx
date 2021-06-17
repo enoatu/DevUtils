@@ -4,8 +4,9 @@ import Layout from '@c/Layout'
 export default function Combination() {
   const [source, setSource] = useState('')
   const [result, setResult] = useState('')
+  const [separator, setSeparator] = useState('→')
   const [num, setNum] = useState(2)
-  const sourceExample = `hoge fuga piyo`
+  const sourceExample = `hoge\nfuga\npiyo`
 
   const combination = (nums: string[], k: number): string[][] => {
     let ans = []
@@ -60,7 +61,19 @@ export default function Combination() {
             onChange={(e) => setNum(parseInt(e.target.value))}
           />
         </div>
-        <button onClick={() => display(combination)}>go!</button>
+        <div className="input-wrapper">
+          <p>separator(option)</p>
+          <input
+            type="text"
+            value={separator}
+            onChange={(e) => setSeparator(e.target.value)}
+          />
+        </div>
+        <div className="input-wrapper">
+          <button className="go-button" onClick={() => display(combination)}>
+            Go!
+          </button>
+        </div>
         <div className="input-wrapper">
           <textarea className="result-box" value={result} readOnly />
         </div>
@@ -118,27 +131,21 @@ export default function Combination() {
           width: 100%;
         }
 
+        .go-button {
+          width: 50px;
+          height: 50px;
+          border-radius: 30px;
+          margin: auto;
+          border-color: #0070f3;
+        }
+
         .result-box {
           height: 300px;
           width: 100%;
         }
+
         .input-wrapper {
           width: 100%;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
         }
       `}</style>
     </Layout>

@@ -1,31 +1,44 @@
-import { useState } from 'react'
-import { useTranslation } from 'next-i18next'
+import { useState, useEffect } from 'react'
 import Layout from '@c/Layout'
 
 export default function ReplacerApp() {
-  const { t } = useTranslation('common')
   const [source, setSource] = useState('')
-  const [pattern, setPattern] = useState('')
+  const [pattern, setPattern] = useState('%s')
+  const [glue, setGlue] = useState('\n')
   const [replacement, setReplacement] = useState('')
   const [result, setResult] = useState('')
 
   const replace = () => {
-    setResult(source.replaceAll(pattern, replacement))
+    const replacements: string[] = replacement.split(glue) // hoge fuga
+    const result: string = replacements
+      .map((replacement) => source.replace(pattern, replacement))
+      .join(glue)
+    setResult(result)
   }
-  console.log(t)
-  console.log(t('hoeg'))
 
+  const title = 'merge-text'
+  const description = 'Development Utils'
+  const placeholder = 'hoge\nfuga\npiyo'
   return (
-    <Layout title={t('replacer')}>
+    <Layout title={title}>
       <main>
-        <h1 className="title">t('hoeg')</h1>
-        <p className="description">t('description')</p>
+        <h1 className="title">{title}</h1>
+        <p className="description">{description}</p>
         <div>
           <p>source</p>
           <textarea
             className="source-box"
             value={source}
             onChange={(e) => setSource(e.target.value)}
+          />
+        </div>
+        <div>
+          <p>replacement</p>
+          <textarea
+            className="replacement-box"
+            value={replacement}
+            onChange={(e) => setReplacement(e.target.value)}
+            placeholder={placeholder}
           />
         </div>
         <div>
@@ -37,11 +50,11 @@ export default function ReplacerApp() {
           />
         </div>
         <div>
-          <p>replacement</p>
+          <p>glue</p>
           <textarea
-            className="replacement-box"
-            value={replacement}
-            onChange={(e) => setReplacement(e.target.value)}
+            className="glue-box"
+            value={glue}
+            onChange={(e) => setGlue(e.target.value)}
           />
         </div>
         <button onClick={replace}>replace</button>
@@ -100,11 +113,15 @@ export default function ReplacerApp() {
           height: 300px;
           width: 300px;
         }
+        .replacement-box {
+          height: 300px;
+          width: 300px;
+        }
         .pattern-box {
           height: 30px;
           width: 300px;
         }
-        .replacement-box {
+        .glue-box {
           height: 30px;
           width: 300px;
         }

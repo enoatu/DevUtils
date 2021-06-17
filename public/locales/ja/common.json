@@ -1,0 +1,27 @@
+{
+  "index": {
+    "title": "DevUtils",
+    "detail": ""
+  },
+  "replacer": {
+    "title": "replacer",
+    "detail": ""
+  },
+  "hoeg": "s",
+  "multiReplacer": {
+    "title": "Multi String Replacer",
+    "detail": ""
+  },
+  "createNumString": {
+    "title": "Create Num Text",
+    "detail": ""
+  },
+  "mergeText": {
+    "title": "Create Merge Text",
+    "detail": ""
+  },
+  "permutation": {
+    "title": "Permutation",
+    "detail": ""
+  }
+}

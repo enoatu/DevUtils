@@ -1,5 +1,5 @@
-import Head from 'next/head'
 import { useState } from 'react'
+import Layout from '@c/Layout'
 
 export default function MultiReplacerApp() {
   const [source, setSource] = useState('')
@@ -16,15 +16,13 @@ export default function MultiReplacerApp() {
     setResult(resultText)
   }
 
+  const title = 'Multi Replacer'
+  const description = 'Development Utils'
   return (
-    <div className="container">
-      <Head>
-        <title>DevUtils | Multi Replacer </title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Layout title={title}>
       <main>
-        <h1 className="title">Multi Replacer</h1>
-        <p className="description">Development Utils</p>
+        <h1 className="title">{title}</h1>
+        <p className="description">{description}</p>
         <div>
           <p>source</p>
           <textarea
@@ -107,21 +105,6 @@ export default function MultiReplacerApp() {
           width: 300px;
         }
       `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
+    </Layout>
   )
 }

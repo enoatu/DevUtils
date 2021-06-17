@@ -9,6 +9,14 @@ export default function Home() {
         <h1 className="title">{title}</h1>
         <p className="description">{description}</p>
         <div className="grid">
+          <a href="/delete-line-breaks" className="card">
+            <h3>Delete Line Breaks &rarr;</h3>
+            <p>Simple Text Replacer For Efficient</p>
+          </a>
+          <a href="/keep-ratio" className="card">
+            <h3>KeepRatioResize &rarr;</h3>
+            <p>Simple Text Replacer For Efficient</p>
+          </a>
           <a href="/replacer" className="card">
             <h3>Replacer &rarr;</h3>
             <p>Simple Text Replacer For Efficient</p>
@@ -20,6 +28,18 @@ export default function Home() {
 
           <a href="./multi-replacer" className="card">
             <h3>MultiReplacer &rarr;</h3>
+            <p>
+              Instantly deploy your Next.js site to a public URL with Vercel.
+            </p>
+          </a>
+          <a href="./create-num-string" className="card">
+            <h3>CreateNumString &rarr;</h3>
+            <p>
+              Instantly deploy your Next.js site to a public URL with Vercel.
+            </p>
+          </a>
+          <a href="./merge-text" className="card">
+            <h3>MergeText &rarr;</h3>
             <p>
               Instantly deploy your Next.js site to a public URL with Vercel.
             </p>

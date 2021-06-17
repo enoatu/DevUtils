@@ -1,25 +1,21 @@
 import { useState } from 'react'
-import { useTranslation } from 'next-i18next'
 import Layout from '@c/Layout'
 
-export default function ReplacerApp() {
-  const { t } = useTranslation('common')
+export default function DeleteLineBreaks() {
   const [source, setSource] = useState('')
-  const [pattern, setPattern] = useState('')
-  const [replacement, setReplacement] = useState('')
   const [result, setResult] = useState('')
 
-  const replace = () => {
-    setResult(source.replaceAll(pattern, replacement))
+  const deleteBr = () => {
+    setResult(source.replaceAll('\r', '').replaceAll('\n', ''))
   }
-  console.log(t)
-  console.log(t('hoeg'))
 
+  const title = 'Delete Line Breaks'
+  const description = 'Development Utils'
   return (
-    <Layout title={t('replacer')}>
+    <Layout title={title}>
       <main>
-        <h1 className="title">t('hoeg')</h1>
-        <p className="description">t('description')</p>
+        <h1 className="title">{title}</h1>
+        <p className="description">{description}</p>
         <div>
           <p>source</p>
           <textarea
@@ -28,23 +24,7 @@ export default function ReplacerApp() {
             onChange={(e) => setSource(e.target.value)}
           />
         </div>
-        <div>
-          <p>pattern</p>
-          <textarea
-            className="pattern-box"
-            value={pattern}
-            onChange={(e) => setPattern(e.target.value)}
-          />
-        </div>
-        <div>
-          <p>replacement</p>
-          <textarea
-            className="replacement-box"
-            value={replacement}
-            onChange={(e) => setReplacement(e.target.value)}
-          />
-        </div>
-        <button onClick={replace}>replace</button>
+        <button onClick={deleteBr}>delete line breaks</button>
         <div>
           <textarea className="result-box" value={result} readOnly />
         </div>
