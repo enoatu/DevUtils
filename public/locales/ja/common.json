@@ -7,10 +7,9 @@
     "title": "replacer",
     "detail": ""
   },
-  "hoeg": "s",
   "multiReplacer": {
-    "title": "Multi String Replacer",
-    "detail": ""
+    "title": "Multi Text Replacer",
+    "detail": "Multi Text "
   },
   "createNumString": {
     "title": "Create Num Text",

@@ -3,20 +3,20 @@ import Layout from '@c/Layout'
 import Chance from 'chance'
 
 export default function ReplacerApp() {
-  const [column, setColumn] = useState('')
-  const [row, setRow] = useState('')
+  const [column, setColumn] = useState(0)
+  const [row, setRow] = useState(0)
   const [mode, setMode] = useState('numrandom')
   const [result, setResult] = useState('')
 
   const createNumRandom = () => {
     const chance = new Chance()
-    const array: number[] = [...Array(parseInt(row))].map((_, i) => i) // 50 [0, 1, 50]
+    const array: number[] = [...Array(row)].map((_, i) => i) // 50 [0, 1, 50]
     const result = array
       .map((num) => {
         const nextNum = num + 1
         let data = ''
         if (column && column > 1) {
-          const random = chance.string({
+          const random: string = chance.string({
             length: column,
             pool: 'abcdefghijklmnopqrstuvwxyz',
           })
@@ -30,17 +30,17 @@ export default function ReplacerApp() {
   }
 
   const createRandom = () => {
-    const array: number[] = [...Array(parseInt(row))].map((_, i) => i) // 50 [0, 1, 50]
+    const array: number[] = [...Array(row)].map((_, i) => i) // 50 [0, 1, 50]
     const result = array
-      .map((num) => [...Array(parseInt(column))].fill(num + 1).join(''))
+      .map((num) => [...Array(column)].fill(num + 1).join(''))
       .join('\n')
     setResult(result)
   }
 
   const createNum = () => {
-    const array: number[] = [...Array(parseInt(row))].map((_, i) => i) // 50 [0, 1, 50]
+    const array: number[] = [...Array(row)].map((_, i) => i) // 50 [0, 1, 50]
     const result = array
-      .map((num) => [...Array(parseInt(column))].fill(num + 1).join(''))
+      .map((num) => [...Array(column)].fill(num + 1).join(''))
       .join('\n')
     setResult(result)
   }
@@ -71,7 +71,7 @@ export default function ReplacerApp() {
           <textarea
             className="column-box"
             value={column}
-            onChange={(e) => setColumn(e.target.value)}
+            onChange={(e) => setColumn(parseInt(e.target.value))}
           />
         </div>
         <div>
@@ -79,7 +79,7 @@ export default function ReplacerApp() {
           <textarea
             className="row-box"
             value={row}
-            onChange={(e) => setRow(e.target.value)}
+            onChange={(e) => setRow(parseInt(e.target.value))}
           />
         </div>
         <div>

@@ -4,11 +4,11 @@ import Layout from '@c/Layout'
 export default function CreateImage() {
   const [width, setWidth] = useState(300)
   const [height, setHeight] = useState(300)
-  const canvasRef = useRef(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  const draw = () => {
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
+  const draw = (): void => {
+    const canvas = canvasRef.current! // !で type-check 通す
+    const ctx = canvas.getContext('2d')!
     ctx.clearRect(0, 0, width, height)
     ctx.fillStyle = '#ccc'
     ctx.strokeStyle = '#ccc'
@@ -17,8 +17,8 @@ export default function CreateImage() {
     ctx.stroke()
   }
 
-  const onClickCanvas = () => {
-    const canvas = canvasRef.current
+  const onClickCanvas = (): void => {
+    const canvas = canvasRef.current!
     const url = canvas.toDataURL('image/png')
     const a = document.createElement('a')
     a.href = url

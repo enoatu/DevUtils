@@ -40,7 +40,7 @@ export default function KeepRatioResize() {
           <p>width</p>
           <input
             type="number"
-            class="num-box"
+            className="num-box"
             value={width}
             onChange={(e) => setWidth(parseInt(e.target.value))}
           />
@@ -49,7 +49,7 @@ export default function KeepRatioResize() {
           <p>height</p>
           <input
             type="number"
-            class="num-box"
+            className="num-box"
             value={height}
             onChange={(e) => setHeight(parseInt(e.target.value))}
           />
@@ -58,7 +58,7 @@ export default function KeepRatioResize() {
           <p>maxWidth</p>
           <input
             type="number"
-            class="num-box"
+            className="num-box"
             value={maxWidth}
             onChange={(e) => setMaxWidth(parseInt(e.target.value))}
           />
@@ -68,7 +68,7 @@ export default function KeepRatioResize() {
           <input
             type="number"
             id="width-box"
-            class="num-box"
+            className="num-box"
             value={maxHeight}
             onChange={(e) => setMaxHeight(parseInt(e.target.value))}
           />
@@ -78,7 +78,7 @@ export default function KeepRatioResize() {
           <p>width</p>
           <input
             type="number"
-            class="num-box"
+            className="num-box"
             value={resultWidth}
             onChange={(e) => setResultWidth(parseInt(e.target.value))}
           />
@@ -87,7 +87,7 @@ export default function KeepRatioResize() {
           <p>height</p>
           <input
             type="number"
-            class="num-box"
+            className="num-box"
             value={resultHeight}
             onChange={(e) => setResultHeight(parseInt(e.target.value))}
           />

@@ -5,7 +5,7 @@
       "@/*": ["src/*"],
       "@c/*": ["src/components/*"]
     },
-    "target": "es5",
+    "target": "ESNEXT",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": false, // js false
     "skipLibCheck": true,

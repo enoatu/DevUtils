@@ -1,6 +1,8 @@
+import { AppProps } from 'next/app'
 import { appWithTranslation } from 'next-i18next'
 
-const MyApp = ({ Component, pageProps }) => <Component {...pageProps} />
-console.log('ddddddddd')
+const MyApp = ({ Component, pageProps }: AppProps) => (
+  <Component {...pageProps} />
+)
 
 export default appWithTranslation(MyApp)
