@@ -9,6 +9,10 @@ export default function Home() {
         <h1 className="title">{title}</h1>
         <p className="description">{description}</p>
         <div className="grid">
+          <a href="/create-image" className="card">
+            <h3>Create Image &rarr;</h3>
+            <p>Create Image and Download</p>
+          </a>
           <a href="/delete-line-breaks" className="card">
             <h3>Delete Line Breaks &rarr;</h3>
             <p>Simple Text Replacer For Efficient</p>

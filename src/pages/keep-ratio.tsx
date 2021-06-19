@@ -12,7 +12,8 @@ export default function KeepRatioResize() {
   const keepRatioResize = () => {
     let newWidth = maxWidth
     let newHeight = maxHeight
-    if (height > maxHeight || width > maxWidth) { // 画像がmaxより大きい時
+    if (height > maxHeight || width > maxWidth) {
+      // 画像がmaxより大きい時
       const ratio = width / height
       if (newWidth / maxHeight > ratio) {
         newWidth = maxHeight * ratio
