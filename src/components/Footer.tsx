@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <footer>
       <a href="./" rel="noopener noreferrer">
-        Powered by <img src="/enoatu.svg" alt="Enoatu Logo" className="logo" />
+        Powered by <img src="./enoatu.svg" alt="Enoatu Logo" className="logo" />
       </a>
       <style jsx>
         {`
