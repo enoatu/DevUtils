@@ -141,7 +141,7 @@ export default function KeepRatioResize() {
         }
 
         .num-box {
-          width: 30px;
+          width: 300px;
         }
       `}</style>
     </Layout>
