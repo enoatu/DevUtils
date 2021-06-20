@@ -11,9 +11,27 @@ export default function Layout({
   children,
   title = 'This is the default title',
 }: Props) {
+  const gaId = process.env.NEXT_PUBLIC_GA_ID
   return (
     <div className="container">
       <Head>
+        {/* Google Analytics */}
+          {gaId && (
+            <>
+              <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `
+                  window.dataLayer = window.dataLayer || []
+                  function gtag(){dataLayer.push(arguments)}
+                  gtag('js', new Date())
+                  gtag('config', '${gaId}', {
+                    page_path: window.location.pathname,
+                  })`,
+                }}
+              />
+            </>
+          )}>
         <title>DevUtils | {title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
