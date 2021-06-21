@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import Layout from '@c/Layout'
 
-export default function Permutation() {
+export default function Permutation () {
   const [source, setSource] = useState('')
   const [result, setResult] = useState('')
   const [num, setNum] = useState(2)
-  const sourceExample = `hoge fuga piyo`
+  const sourceExample = 'hoge fuga piyo'
 
   const permutation = (nums: string[], k: number): string[][] => {
-    let ans = []
+    const ans = []
     if (nums.length < k) {
       return []
     }
@@ -18,9 +18,9 @@ export default function Permutation() {
       }
     } else {
       for (let i = 0; i < nums.length; i++) {
-        let parts = nums.slice(0)
-        parts.splice(i, 1)[0]
-        let row = permutation(parts, k - 1)
+        const parts = nums.slice(0)
+        parts.splice(i, 1)
+        const row = permutation(parts, k - 1)
         for (let j = 0; j < row.length; j++) {
           ans.push([nums[i]].concat(row[j]))
         }

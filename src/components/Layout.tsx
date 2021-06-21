@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import Head from 'next/head'
 import Footer from '@c/Footer'
 
@@ -7,12 +7,11 @@ type Props = {
   title: string
 }
 
-export default function Layout({
+export default function Layout ({
   children,
-  title = 'This is the default title',
+  title = 'This is the default title'
 }: Props) {
   const gaId = process.env.NEXT_PUBLIC_GA_ID
-
   const gaURL = `https://www.googletagmanager.com/gtag/js?id=${gaId}`
   const dangerouslyHTML = {
     __html: `
@@ -21,7 +20,7 @@ export default function Layout({
     gtag('js', new Date())
     gtag('config', '${gaId}', {
       page_path: window.location.pathname,
-    })`,
+    })`
   }
   return (
     <div className="container">
@@ -30,7 +29,7 @@ export default function Layout({
         {gaId && (
           <>
             <script async src={gaURL} />
-            <script dangerouslySetInnerHTML={$dangerouslyHTML} />
+            <script dangerouslySetInnerHTML={dangerouslyHTML} />
           </>
         )}
         <title>DevUtils | {title}</title>

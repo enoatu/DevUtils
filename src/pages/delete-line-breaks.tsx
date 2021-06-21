@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Layout from '@c/Layout'
 
-export default function DeleteLineBreaks() {
+export default function DeleteLineBreaks () {
   const [source, setSource] = useState('')
   const [result, setResult] = useState('')
 

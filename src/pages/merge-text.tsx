@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Layout from '@c/Layout'
 
-export default function ReplacerApp() {
+export default function ReplacerApp () {
   const [source, setSource] = useState('')
   const [pattern, setPattern] = useState('%s')
   const [glue, setGlue] = useState('\n')

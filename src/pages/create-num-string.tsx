@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Layout from '@c/Layout'
 import Chance from 'chance'
 
-export default function ReplacerApp() {
+export default function ReplacerApp () {
   const [column, setColumn] = useState(0)
   const [row, setRow] = useState(0)
   const [mode, setMode] = useState('numrandom')
@@ -18,7 +18,7 @@ export default function ReplacerApp() {
         if (column && column > 1) {
           const random: string = chance.string({
             length: column,
-            pool: 'abcdefghijklmnopqrstuvwxyz',
+            pool: 'abcdefghijklmnopqrstuvwxyz'
           })
           data = random.substring([...String(nextNum)].length)
           return nextNum + data
@@ -84,7 +84,7 @@ export default function ReplacerApp() {
         </div>
         <div>
           <p>mode</p>
-          <select value={mode}>
+          <select value={mode} onChange={(e) => setMode(e.target.value)}>
             <option value="numrandom">num + random string</option>
             <option value="random">random string</option>
             <option value="num">num</option>

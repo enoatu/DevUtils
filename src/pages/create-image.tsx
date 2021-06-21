@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Layout from '@c/Layout'
 
-export default function CreateImage() {
+export default function CreateImage () {
   const [width, setWidth] = useState(300)
   const [height, setHeight] = useState(300)
   const canvasRef = useRef<HTMLCanvasElement>(null)

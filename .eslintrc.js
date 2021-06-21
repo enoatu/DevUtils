@@ -5,9 +5,7 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'standard'
-    'prettier',
-+   'prettier/@typescript-eslint',
+    'standard',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -22,7 +20,7 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
-    semi': 'error',
+    semi: 'error',
     // let と const の区別を厳格化
     'prefer-const': 'error',
     // === の使用を推奨
@@ -31,5 +29,10 @@ module.exports = {
     // 設定で 出さないように https://ja.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#eslint
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
+  },
+  settings: {
+    react: {
+      version: 'detect'
+    }
   }
 }

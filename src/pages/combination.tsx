@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import Layout from '@c/Layout'
 
-export default function Combination() {
+export default function Combination () {
   const [source, setSource] = useState('')
   const [result, setResult] = useState('')
   const [separator, setSeparator] = useState('→')
   const [num, setNum] = useState(2)
-  const sourceExample = `hoge\nfuga\npiyo`
+  const sourceExample = 'hoge\nfuga\npiyo'
 
   const combination = (nums: string[], k: number): string[][] => {
-    let ans = []
+    const ans = []
     if (nums.length < k) {
       return []
     }
@@ -19,7 +19,7 @@ export default function Combination() {
       }
     } else {
       for (let i = 0; i < nums.length - k + 1; i++) {
-        let row = combination(nums.slice(i + 1), k - 1)
+        const row = combination(nums.slice(i + 1), k - 1)
         for (let j = 0; j < row.length; j++) {
           ans.push([nums[i]].concat(row[j]))
         }

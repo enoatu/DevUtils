@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Layout from '@c/Layout'
 
-export default function MultiReplacerApp() {
+export default function MultiReplacerApp () {
   const [source, setSource] = useState('')
   const [pattern, setPattern] = useState('')
   const [result, setResult] = useState('')

@@ -1,25 +1,23 @@
 import { useState } from 'react'
-import { useTranslation } from 'next-i18next'
 import Layout from '@c/Layout'
 
-export default function ReplacerApp() {
-  const { t } = useTranslation('common')
+export default function ReplacerApp () {
   const [source, setSource] = useState('')
   const [pattern, setPattern] = useState('')
   const [replacement, setReplacement] = useState('')
   const [result, setResult] = useState('')
 
-  const replace = () => {
+  const replace = (): void => {
     setResult(source.replaceAll(pattern, replacement))
   }
-  console.log(t)
-  console.log(t('hoeg'))
+  const title = 'create-num-string'
+  const description = 'Development Utils'
 
   return (
-    <Layout title={t('replacer')}>
+    <Layout title={title}>
       <main>
-        <h1 className="title">t('hoeg')</h1>
-        <p className="description">t('description')</p>
+        <h1 className="title">{title}</h1>
+        <p className="description">{description}</p>
         <div>
           <p>source</p>
           <textarea
