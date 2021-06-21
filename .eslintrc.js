@@ -32,6 +32,7 @@ module.exports = {
   },
   settings: {
     react: {
+      // Warning: React version not specified in eslint-plugin-react settings. が出ないように
       version: 'detect'
     }
   }
