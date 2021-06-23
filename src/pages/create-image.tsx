@@ -17,15 +17,18 @@ export default function CreateImage () {
     ctx.rect(0, 0, w, h)
     ctx.fill()
     ctx.stroke()
-    if (w > 50 && h > 50) {
-      ctx.fillStyle = '#f00'
-      let fontSize = 25
-      ctx.font = `${fontSize}px 'ＭＳ ゴシック'`
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'center'
-      const text = `w${w}px × h${h}px`
-      ctx.fillText(text, width/2, height/2, width)
+    ctx.fillStyle = '#f00'
+    let fontSize: number = 0
+    if (w - h > 0) {
+      fontSize = (h * 1) / 3
+    } else {
+      fontSize = (w * 1) / 3
     }
+    ctx.font = `${fontSize}px 'ＭＳ ゴシック'`
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    const text = `w${w}px × h${h}px`
+    ctx.fillText(text, w / 2, h / 2, w)
   }
 
   const onClickCanvas = (): void => {
