@@ -7,14 +7,25 @@ export default function CreateImage () {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const draw = (): void => {
+    const w = width || 0
+    const h = height || 0
     const canvas = canvasRef.current! // !で type-check 通す
     const ctx = canvas.getContext('2d')!
-    ctx.clearRect(0, 0, width, height)
+    ctx.clearRect(0, 0, w, h)
     ctx.fillStyle = '#ccc'
     ctx.strokeStyle = '#ccc'
-    ctx.rect(0, 0, width, height)
+    ctx.rect(0, 0, w, h)
     ctx.fill()
     ctx.stroke()
+    if (w > 50 && h > 50) {
+      ctx.fillStyle = '#f00'
+      let fontSize = 25
+      ctx.font = `${fontSize}px 'ＭＳ ゴシック'`
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'center'
+      const text = `w${w}px × h${h}px`
+      ctx.fillText(text, width/2, height/2, width)
+    }
   }
 
   const onClickCanvas = (): void => {
