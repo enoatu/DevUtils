@@ -9,6 +9,10 @@ export default function Home () {
         <h1 className="title">{title}</h1>
         <p className="description">{description}</p>
         <div className="grid">
+          <a href="./create-text" className="card">
+            <h3>Create Text &rarr;</h3>
+            <p>Create Text</p>
+          </a>
           <a href="./create-image" className="card">
             <h3>Create Image &rarr;</h3>
             <p>Create Image and Download</p>
