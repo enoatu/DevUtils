@@ -6,6 +6,7 @@ export default function CreateImage() {
   const [width, setWidth] = useState(300)
   const [height, setHeight] = useState(300)
   const [text, setText] = useState('')
+  const [textSize, setTextSize] = useState(0)
   const [bgColor, setBgColor] = useState('#ccc')
   const [textColor, setTextColor] = useState('#f00')
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -24,9 +25,17 @@ export default function CreateImage() {
     ctx.fillStyle = textColor
     let fontSize: number = 0
     if (w - h > 0) {
-      fontSize = (h * 1) / 3
+      if (textSize === 0) {
+        fontSize = (h * 1) / 3
+      } else {
+        fontSize = (h * 2) / 3
+      }
     } else {
-      fontSize = (w * 1) / 3
+      if (textSize === 0) {
+        fontSize = (w * 1) / 3
+      } else {
+        fontSize = (w * 2) / 3
+      }
     }
     ctx.font = `${fontSize}px 'ＭＳ ゴシック'`
     ctx.textAlign = 'center'
@@ -46,7 +55,7 @@ export default function CreateImage() {
 
   useEffect(() => {
     draw()
-  }, [])
+  }, [width, height, text, textSize, textColor, bgColor])
 
   const title = 'create image'
   const description = 'Development Utils'
@@ -84,6 +93,18 @@ export default function CreateImage() {
             />
           </div>
           <div>
+            <p>text size</p>
+            <select
+              type="number"
+              className="num-box"
+              value={textSize}
+              onChange={(e) => setTextSize(parseInt(e.target.value))}
+            >
+              <option value="0">normal</option>
+              <option value="1">big</option>
+            </select>
+          </div>
+          <div>
             <p>text color</p>
             <input
               type="text"
@@ -102,7 +123,6 @@ export default function CreateImage() {
             />
           </div>
         </ExtraOptions>
-        <button onClick={draw}>draw</button>
         <p>Click Image for download!</p>
         <canvas
           ref={canvasRef}
