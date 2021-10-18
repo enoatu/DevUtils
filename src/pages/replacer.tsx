@@ -10,7 +10,7 @@ export default function ReplacerApp() {
   const replace = (): void => {
     setResult(source.replaceAll(pattern, replacement))
   }
-  const title = 'create-num-string'
+  const title = 'replacer'
   const description = 'Development Utils'
 
   return (
@@ -32,6 +32,7 @@ export default function ReplacerApp() {
             className="pattern-box"
             value={pattern}
             onChange={(e) => setPattern(e.target.value)}
+            placeholder="ex) %s"
           />
         </div>
         <div>

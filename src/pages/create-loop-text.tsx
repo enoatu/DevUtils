@@ -14,8 +14,8 @@ export default function ReplacerApp() {
     })
     setResult(result)
   }
-  const title = 'create-text'
-  const description = 'Development Utils'
+  const title = 'create-loop-text'
+  const description = 'create loop text'
 
   return (
     <Layout title={title}>
@@ -31,7 +31,7 @@ export default function ReplacerApp() {
           />
         </div>
         <div>
-          <p>num</p>
+          <p>loop num</p>
           <input
             type="number"
             className="num-box"

@@ -11,14 +11,14 @@ export default function ReplacerApp() {
   const replace = () => {
     const replacements: string[] = replacement.split(glue) // hoge fuga
     const result: string = replacements
-      .map((replacement) => source.replace(pattern, replacement))
+      .map((replacement) => source.replaceAll(pattern, replacement))
       .join(glue)
     setResult(result)
   }
 
   const title = 'merge-text'
   const description = 'Development Utils'
-  const placeholder = 'hoge\nfuga\npiyo'
+  const placeholder = 'house\nstore\nstation'
   return (
     <Layout title={title}>
       <main>
@@ -30,6 +30,7 @@ export default function ReplacerApp() {
             className="source-box"
             value={source}
             onChange={(e) => setSource(e.target.value)}
+            placeholder="I'll go to %s"
           />
         </div>
         <div>
@@ -47,6 +48,7 @@ export default function ReplacerApp() {
             className="pattern-box"
             value={pattern}
             onChange={(e) => setPattern(e.target.value)}
+            placeholder='%s'
           />
         </div>
         <div>

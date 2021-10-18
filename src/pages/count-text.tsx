@@ -9,8 +9,8 @@ export default function ReplacerApp() {
     setResult([...source].length)
   })
 
-  const title = 'create-text'
-  const description = 'Development Utils'
+  const title = 'count-text'
+  const description = 'count text'
 
   return (
     <Layout title={title}>

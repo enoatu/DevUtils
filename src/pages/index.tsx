@@ -13,9 +13,9 @@ export default function Home() {
             <h3>Count Text &rarr;</h3>
             <p>Count Text</p>
           </a>
-          <a href="./create-text" className="card">
-            <h3>Create Text &rarr;</h3>
-            <p>Create Text</p>
+          <a href="./create-loop-text" className="card">
+            <h3>Create Loop &rarr;</h3>
+            <p>Create Loop Text</p>
           </a>
           <a href="./create-image" className="card">
             <h3>Create Image &rarr;</h3>
@@ -23,7 +23,7 @@ export default function Home() {
           </a>
           <a href="./delete-line-breaks" className="card">
             <h3>Delete Line Breaks &rarr;</h3>
-            <p>Simple Text Replacer For Efficient</p>
+            <p>Simple Line Breaks Remove For Efficient</p>
           </a>
           <a href="./keep-ratio" className="card">
             <h3>KeepRatioResize &rarr;</h3>
