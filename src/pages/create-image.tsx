@@ -1,9 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import Layout from '@c/Layout'
+import ExtraOptions from '@c/utils//ExtraOptions'
 
 export default function CreateImage () {
   const [width, setWidth] = useState(300)
   const [height, setHeight] = useState(300)
+  const [text, setText] = useState('')
+  const [bgColor, setBgColor] = useState('#ccc')
+  const [textColor, setTextColor] = useState('#f00')
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const draw = (): void => {
@@ -12,12 +16,12 @@ export default function CreateImage () {
     const canvas = canvasRef.current! // !で type-check 通す
     const ctx = canvas.getContext('2d')!
     ctx.clearRect(0, 0, w, h)
-    ctx.fillStyle = '#ccc'
-    ctx.strokeStyle = '#ccc'
+    ctx.fillStyle = bgColor
+    ctx.strokeStyle = bgColor
     ctx.rect(0, 0, w, h)
     ctx.fill()
     ctx.stroke()
-    ctx.fillStyle = '#f00'
+    ctx.fillStyle = textColor
     let fontSize: number = 0
     if (w - h > 0) {
       fontSize = (h * 1) / 3
@@ -27,8 +31,8 @@ export default function CreateImage () {
     ctx.font = `${fontSize}px 'ＭＳ ゴシック'`
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    const text = `w${w}px × h${h}px`
-    ctx.fillText(text, w / 2, h / 2, w)
+    const textImage = text || `w${w}px × h${h}px`
+    ctx.fillText(textImage, w / 2, h / 2, w)
   }
 
   const onClickCanvas = (): void => {
@@ -36,7 +40,7 @@ export default function CreateImage () {
     const url = canvas.toDataURL('image/png')
     const a = document.createElement('a')
     a.href = url
-    a.setAttribute('download', `w${width}px_h${height}px.png`)
+    a.setAttribute('download', `${text}.png`)
     a.click()
   }
 
@@ -69,8 +73,37 @@ export default function CreateImage () {
             onChange={(e) => setHeight(parseInt(e.target.value))}
           />
         </div>
+        <ExtraOptions>
+          <div>
+            <p>text</p>
+            <input
+              type="text"
+              className="text-box"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+          </div>
+          <div>
+            <p>text color</p>
+            <input
+              type="text"
+              className="text-box"
+              value={textColor}
+              onChange={(e) => setTextColor(e.target.value)}
+            />
+          </div>
+          <div>
+            <p>background color</p>
+            <input
+              type="text"
+              className="text-box"
+              value={bgColor}
+              onChange={(e) => setBgColor(e.target.value)}
+            />
+          </div>
+        </ExtraOptions>
         <button onClick={draw}>draw</button>
-        <p>Click for download!</p>
+        <p>Click Image for download!</p>
         <canvas
           ref={canvasRef}
           width={width}
