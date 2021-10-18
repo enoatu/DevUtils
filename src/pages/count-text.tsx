@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Layout from '@c/Layout'
 
-export default function ReplacerApp () {
+export default function ReplacerApp() {
   const [source, setSource] = useState('')
   const [result, setResult] = useState(0)
 
@@ -26,7 +26,7 @@ export default function ReplacerApp () {
           />
         </div>
         <div>
-          <p>{ result }</p>
+          <p>{result}</p>
         </div>
       </main>
 

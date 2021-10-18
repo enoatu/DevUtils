@@ -1,6 +1,6 @@
 import Layout from '@c/Layout'
 
-export default function Home () {
+export default function Home() {
   const title = 'DevUtils'
   const description = 'Development Utils'
   return (

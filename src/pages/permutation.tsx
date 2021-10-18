@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Layout from '@c/Layout'
 
-export default function Permutation () {
+export default function Permutation() {
   const [source, setSource] = useState('')
   const [result, setResult] = useState('')
   const [num, setNum] = useState(2)

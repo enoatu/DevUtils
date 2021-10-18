@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Layout from '@c/Layout'
 
-export default function Combination () {
+export default function Combination() {
   const [source, setSource] = useState('')
   const [result, setResult] = useState('')
   const [separator, setSeparator] = useState('→')

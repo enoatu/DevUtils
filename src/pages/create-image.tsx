@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import Layout from '@c/Layout'
 import ExtraOptions from '@c/utils//ExtraOptions'
 
-export default function CreateImage () {
+export default function CreateImage() {
   const [width, setWidth] = useState(300)
   const [height, setHeight] = useState(300)
   const [text, setText] = useState('')

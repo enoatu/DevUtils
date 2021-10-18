@@ -7,9 +7,9 @@ type Props = {
   title: string
 }
 
-export default function Layout ({
+export default function Layout({
   children,
-  title = 'This is the default title'
+  title = 'This is the default title',
 }: Props) {
   const gaId = process.env.NEXT_PUBLIC_GA_ID
   const gaURL = `https://www.googletagmanager.com/gtag/js?id=${gaId}`
@@ -20,7 +20,7 @@ export default function Layout ({
     gtag('js', new Date())
     gtag('config', '${gaId}', {
       page_path: window.location.pathname,
-    })`
+    })`,
   }
   return (
     <div className="container">

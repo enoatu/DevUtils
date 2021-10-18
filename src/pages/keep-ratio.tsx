@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Layout from '@c/Layout'
 
-export default function KeepRatioResize () {
+export default function KeepRatioResize() {
   const [width, setWidth] = useState(0)
   const [height, setHeight] = useState(0)
   const [maxWidth, setMaxWidth] = useState(100)

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Layout from '@c/Layout'
 
-export default function ReplacerApp () {
+export default function ReplacerApp() {
   const [source, setSource] = useState('')
   const [num, setNum] = useState(0)
   const [result, setResult] = useState('')
