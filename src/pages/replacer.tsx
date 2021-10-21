@@ -1,14 +1,21 @@
 import { useState } from 'react'
 import Layout from '@c/Layout'
+import ExtraOptions from '@c/utils//ExtraOptions'
 
 export default function ReplacerApp() {
   const [source, setSource] = useState('')
   const [pattern, setPattern] = useState('')
   const [replacement, setReplacement] = useState('')
   const [result, setResult] = useState('')
+  const [isRegexMode, setIsRegexMode] = useState(false)
 
   const replace = (): void => {
-    setResult(source.replaceAll(pattern, replacement))
+    if (isRegexMode) {
+      const regex = new RegExp(pattern, 'g')
+      setResult(source.replaceAll(regex, replacement))
+    } else {
+      setResult(source.replaceAll(pattern, replacement))
+    }
   }
   const title = 'replacer'
   const description = 'Development Utils'
@@ -35,6 +42,12 @@ export default function ReplacerApp() {
             placeholder="ex) %s"
           />
         </div>
+        <ExtraOptions>
+          <label>RegexMode</label>
+          <input type="radio" name="aradio" value="A" checked={isRegexMode} onChange={() => setIsRegexMode(true)}/>
+          <label>StringMode</label>
+          <input type="radio" name="aradio" value="B" checked={!isRegexMode} onChange={() => setIsRegexMode(false)}/>
+        </ExtraOptions>
         <div>
           <p>replacement</p>
           <textarea
