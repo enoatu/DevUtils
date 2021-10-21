@@ -95,7 +95,6 @@ export default function CreateImage() {
           <div>
             <p>text size</p>
             <select
-              type="number"
               className="num-box"
               value={textSize}
               onChange={(e) => setTextSize(parseInt(e.target.value))}

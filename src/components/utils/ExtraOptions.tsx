@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Layout from '@c/Layout'
 
-export default function CreateImage(props) {
+export default function CreateImage(props: any) {
   const [isShow, setIsShow] = useState(false)
   return (
     <div>
