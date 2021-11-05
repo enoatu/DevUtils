@@ -9,7 +9,7 @@ export default function KeepRatioResize() {
   const [resultWidth, setResultWidth] = useState(0)
   const [resultHeight, setResultHeight] = useState(0)
 
-  const keepRatioResize = () => {
+  const keepRatioResize = (): void => {
     let newWidth = maxWidth
     let newHeight = maxHeight
     if (height > maxHeight || width > maxWidth) {

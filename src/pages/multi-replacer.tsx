@@ -6,7 +6,7 @@ export default function MultiReplacerApp() {
   const [pattern, setPattern] = useState('')
   const [result, setResult] = useState('')
 
-  const replace = () => {
+  const replace = (): void => {
     const patternArray = pattern.split('\n')
     let resultText = source
     patternArray.forEach((text) => {

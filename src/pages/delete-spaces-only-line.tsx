@@ -5,7 +5,7 @@ export default function DeleteLineBreaks() {
   const [source, setSource] = useState('')
   const [result, setResult] = useState('')
 
-  const deleteBr = () => {
+  const deleteBr = (): void => {
     setResult(source.replaceAll(/^\s+$/g, ''))
   }
 
