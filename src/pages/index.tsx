@@ -21,6 +21,10 @@ export default function Home() {
             <h3>Create Image &rarr;</h3>
             <p>Create Image and Download</p>
           </a>
+          <a href="./delete-spaces-only-line" className="card">
+            <h3>Delete Spaces Only Line &rarr;</h3>
+            <p>Simple Spaces Only Line  Remove For Efficient</p>
+          </a>
           <a href="./delete-line-breaks" className="card">
             <h3>Delete Line Breaks &rarr;</h3>
             <p>Simple Line Breaks Remove For Efficient</p>
