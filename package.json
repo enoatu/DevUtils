@@ -13,6 +13,11 @@
     "fix": "npm run fmt && npm run lint",
     "prepare": "husky install"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "src/*": [
       "prettier --check --write 'src/**/*{.js,.jsx,.ts,.tsx}'",

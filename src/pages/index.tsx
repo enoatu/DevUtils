@@ -21,6 +21,10 @@ export default function Home() {
             <h3>Create Image &rarr;</h3>
             <p>Create Image and Download</p>
           </a>
+          <a href="./pretty-json" className="card">
+            <h3>Pretty Json &rarr;</h3>
+            <p>Smart Pretty Json</p>
+          </a>
           <a href="./delete-spaces-only-line" className="card">
             <h3>Delete Spaces Only Line &rarr;</h3>
             <p>Simple Spaces Only Line  Remove For Efficient</p>

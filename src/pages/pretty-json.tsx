@@ -1,23 +1,38 @@
 import { useState } from 'react'
 import Layout from '@c/Layout'
 
-export default function DeleteLineBreaks() {
+export default function PrettyJsonApp() {
   const [source, setSource] = useState('')
   const [result, setResult] = useState('')
+  const [indentNum, setIndentNum] = useState(2)
 
-  const deleteBr = () => {
-    const a = source.replaceAll('\r', '').replaceAll('\n\n', ',')
-    let set = new Set(a.split(','))
-    setResult([...set].join(','))
+  const replace = (): void => {
+    let json = '' 
+    try {
+      json = JSON.stringify(JSON.parse(source), null, indentNum)
+    } catch (e) {
+      // replace \" with "
+      alert('hoge')
+      try {
+        const replacedSource = source.replaceAll('\\"', '"')
+        json = JSON.stringify(JSON.parse(replacedSource), null, indentNum)
+      } catch {
+        setResult('JSONのparseに失敗しました')
+        return
+      }
+    }
+    setResult(json)
   }
+  const title = 'pretty json'
+  const description = "Yoo can pretty quoted double quotation json."
+  const description2 = "ex) one line json to here document"
 
-  const title = 'Delete Line Breaks'
-  const description = 'Development Utils'
   return (
     <Layout title={title}>
       <main>
         <h1 className="title">{title}</h1>
         <p className="description">{description}</p>
+        <p className="description">{description2}</p>
         <div>
           <p>source</p>
           <textarea
@@ -26,7 +41,18 @@ export default function DeleteLineBreaks() {
             onChange={(e) => setSource(e.target.value)}
           />
         </div>
-        <button onClick={deleteBr}>delete line breaks</button>
+        <div>
+          <p>indent</p>
+          <input
+            type="number"
+            min={1}
+            max={10}
+            className="num-box"
+            value={indentNum}
+            onChange={(e) => setIndentNum(parseInt(e.target.value))}
+          />
+        </div>
+        <button onClick={replace}>pretty</button>
         <div>
           <textarea className="result-box" value={result} readOnly />
         </div>
@@ -82,14 +108,11 @@ export default function DeleteLineBreaks() {
           height: 300px;
           width: 300px;
         }
-        .pattern-box {
-          height: 30px;
+
+        .num-box {
           width: 300px;
         }
-        .replacement-box {
-          height: 30px;
-          width: 300px;
-        }
+
         .result-box {
           height: 300px;
           width: 300px;
