@@ -11,9 +11,8 @@ export default function PrettyJsonApp() {
     try {
       json = JSON.stringify(JSON.parse(source), null, indentNum)
     } catch (e) {
-      // replace \" with "
-      alert('hoge')
       try {
+        // replace \" with "
         const replacedSource = source.replaceAll('\\"', '"')
         json = JSON.stringify(JSON.parse(replacedSource), null, indentNum)
       } catch {
