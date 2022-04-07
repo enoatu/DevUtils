@@ -49,7 +49,13 @@ export default function Home() {
           <a href="./multi-replacer" className="card">
             <h3>MultiReplacer &rarr;</h3>
             <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+              MultiReplacer
+            </p>
+          </a>
+          <a href="./highlight-string" className="card">
+            <h3>Highlight String &rarr;</h3>
+            <p>
+              Instantly Highlight String by number
             </p>
           </a>
           <a href="./create-num-string" className="card">
