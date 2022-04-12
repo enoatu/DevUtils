@@ -70,6 +70,18 @@ export default function Home() {
               Instantly deploy your Next.js site to a public URL with Vercel.
             </p>
           </a>
+          <a href="./merge-text-for-sql" className="card">
+            <h3>MergeText For SQL &rarr;</h3>
+            <p>
+              Instantly deploy your Next.js site to a public URL with Vercel.
+            </p>
+          </a>
+          <a href="./utf16-decoder" className="card">
+            <h3>utf16 decoder &rarr;</h3>
+            <p>
+              Instantly deploy your Next.js site to a public URL with Vercel.
+            </p>
+          </a>
         </div>
       </main>
       <style jsx>{`
