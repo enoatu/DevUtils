@@ -44,7 +44,10 @@ export default function HighlightStringApp() {
         </div>
         <button onClick={replace}>highlight</button>
         <div>
-          <div className="result-box" dangerouslySetInnerHTML={{ __html: result }} />
+          <div
+            className="result-box"
+            dangerouslySetInnerHTML={{ __html: result }}
+          />
         </div>
       </main>
 

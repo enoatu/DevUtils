@@ -2,17 +2,22 @@ import { useState } from 'react'
 import Layout from '@c/Layout'
 
 export default function ReplacerApp() {
-  const [source, setSource] = useState('INSERT INTO profile (member_id, name) VALUES(%s);')
+  const [source, setSource] = useState(
+    'INSERT INTO profile (member_id, name) VALUES(%s);'
+  )
   const [pattern, setPattern] = useState('%s')
-  const [glue, setGlue] = useState("\n")
-  const [separator, setSeparator] = useState("\t")
-  const [replacement, setReplacement] = useState("123\tJohn\n1234\tJane")
+  const [glue, setGlue] = useState('\n')
+  const [separator, setSeparator] = useState('\t')
+  const [replacement, setReplacement] = useState('123\tJohn\n1234\tJane')
   const [result, setResult] = useState('')
 
   const replace = (): void => {
     let replacements: string[] = replacement.split(glue) // hoge fuga
-    replacements = replacements.map(r => {
-      return r.split(separator).map(s => `'` + s + `'`).join(',')
+    replacements = replacements.map((r) => {
+      return r
+        .split(separator)
+        .map((s) => `'` + s + `'`)
+        .join(',')
     })
     const result: string = replacements
       .map((replacement) => source.replaceAll(pattern, replacement))
@@ -52,7 +57,7 @@ export default function ReplacerApp() {
             className="pattern-box"
             value={pattern}
             onChange={(e) => setPattern(e.target.value)}
-            placeholder='%s'
+            placeholder="%s"
           />
         </div>
         <div>

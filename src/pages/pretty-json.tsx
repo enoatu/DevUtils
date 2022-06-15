@@ -7,7 +7,7 @@ export default function PrettyJsonApp() {
   const [indentNum, setIndentNum] = useState(2)
 
   const replace = (): void => {
-    let json = '' 
+    let json = ''
     try {
       json = JSON.stringify(JSON.parse(source), null, indentNum)
     } catch (e) {
@@ -23,8 +23,8 @@ export default function PrettyJsonApp() {
     setResult(json)
   }
   const title = 'pretty json'
-  const description = "Yoo can pretty quoted double quotation json."
-  const description2 = "ex) one line json to here document"
+  const description = 'Yoo can pretty quoted double quotation json.'
+  const description2 = 'ex) one line json to here document'
 
   return (
     <Layout title={title}>

@@ -48,7 +48,7 @@ export default function ReplacerApp() {
             className="pattern-box"
             value={pattern}
             onChange={(e) => setPattern(e.target.value)}
-            placeholder='%s'
+            placeholder="%s"
           />
         </div>
         <div>

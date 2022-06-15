@@ -3,23 +3,30 @@ import Layout from '@c/Layout'
 import chartable from '@/utils/chartable'
 
 interface CharTableObject {
-    [text: string]: string
+  [text: string]: string
 }
 
 export default function DecoderApp() {
-  const [source, setSource] = useState('nickname => \\x{30d9}\\x{30b8}\\x{30bf}\\x{30d6}\\x{30eb}')
+  const [source, setSource] = useState(
+    'nickname => \\x{30d9}\\x{30b8}\\x{30bf}\\x{30d6}\\x{30eb}'
+  )
   const [result, setResult] = useState('')
 
-  const ctj = chartable.split('\n').reduce((acc: CharTableObject, line: string) => {
-    const arr = line.split(' ')
-    const text = arr[arr.length - 2]
-    const utf16 = arr[1]
-    acc[utf16] = text
-    return acc
-  }, {})
+  const ctj = chartable
+    .split('\n')
+    .reduce((acc: CharTableObject, line: string) => {
+      const arr = line.split(' ')
+      const text = arr[arr.length - 2]
+      const utf16 = arr[1]
+      acc[utf16] = text
+      return acc
+    }, {})
 
   const replace = (): void => {
-    const result = source.replaceAll(/\\x{(\w{4})}/g, ((_,hex) => ctj[hex] || ctj[hex.toUpperCase()] || 'FAIL'))
+    const result = source.replaceAll(
+      /\\x{(\w{4})}/g,
+      (_, hex) => ctj[hex] || ctj[hex.toUpperCase()] || 'FAIL'
+    )
     setResult(result)
   }
   const title = 'UTF16 Decoder'

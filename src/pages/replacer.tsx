@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Layout from '@c/Layout'
-import ExtraOptions from '@c/utils//ExtraOptions'
+import AdditionalOptions from '@c/utils//AdditionalOptions'
 
 export default function ReplacerApp() {
   const [source, setSource] = useState('')
@@ -42,12 +42,24 @@ export default function ReplacerApp() {
             placeholder="ex) %s"
           />
         </div>
-        <ExtraOptions>
+        <AdditionalOptions>
           <label>RegexMode</label>
-          <input type="radio" name="aradio" value="A" checked={isRegexMode} onChange={() => setIsRegexMode(true)}/>
+          <input
+            type="radio"
+            name="aradio"
+            value="A"
+            checked={isRegexMode}
+            onChange={() => setIsRegexMode(true)}
+          />
           <label>StringMode</label>
-          <input type="radio" name="aradio" value="B" checked={!isRegexMode} onChange={() => setIsRegexMode(false)}/>
-        </ExtraOptions>
+          <input
+            type="radio"
+            name="aradio"
+            value="B"
+            checked={!isRegexMode}
+            onChange={() => setIsRegexMode(false)}
+          />
+        </AdditionalOptions>
         <div>
           <p>replacement</p>
           <textarea
