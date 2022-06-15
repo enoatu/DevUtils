@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import Head from 'next/head'
 import Footer from '@c/Footer'
+import { useTranslation } from 'react-i18next'
 
 type Props = {
   children?: ReactNode
@@ -22,6 +23,10 @@ export default function Layout({
       page_path: window.location.pathname,
     })`,
   }
+  const { i18n } = useTranslation()
+  const toggleLocale = () => {
+    i18n.changeLanguage(i18n.language === 'en' ? 'ja' : 'en')
+  }
   return (
     <div className="container">
       <Head>
@@ -35,6 +40,10 @@ export default function Layout({
         <title>DevUtils | {title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <button onClick={toggleLocale}>
+        Change Language {i18n.language} &gt;{' '}
+        {i18n.language === 'en' ? 'ja' : 'en'}
+      </button>
 
       {children}
 

@@ -1,13 +1,13 @@
 import Layout from '@c/Layout'
+import { useTranslation } from 'react-i18next'
 
 export default function Home() {
-  const title = 'DevUtils'
-  const description = 'Development Utils'
+  const { t } = useTranslation()
   return (
     <Layout title="Top">
       <main>
-        <h1 className="title">{title}</h1>
-        <p className="description">{description}</p>
+        <h1 className="title">{t('title', { ns: 'common' })}</h1>
+        <p className="description">{t('description', { ns: 'common' })}</p>
         <div className="grid">
           <a href="./count-text" className="card">
             <h3>Count Text &rarr;</h3>
@@ -18,8 +18,8 @@ export default function Home() {
             <p>Create Loop Text</p>
           </a>
           <a href="./create-image" className="card">
-            <h3>Create Image &rarr;</h3>
-            <p>Create Image and Download</p>
+            <h3>{t('title', { ns: 'create-image' })} &rarr;</h3>
+            <p>{t('description', { ns: 'create-image'})}</p>
           </a>
           <a href="./pretty-json" className="card">
             <h3>Pretty Json &rarr;</h3>
@@ -27,7 +27,7 @@ export default function Home() {
           </a>
           <a href="./delete-spaces-only-line" className="card">
             <h3>Delete Spaces Only Line &rarr;</h3>
-            <p>Simple Spaces Only Line  Remove For Efficient</p>
+            <p>Simple Spaces Only Line Remove For Efficient</p>
           </a>
           <a href="./delete-line-breaks" className="card">
             <h3>Delete Line Breaks &rarr;</h3>
@@ -48,15 +48,11 @@ export default function Home() {
 
           <a href="./multi-replacer" className="card">
             <h3>MultiReplacer &rarr;</h3>
-            <p>
-              MultiReplacer
-            </p>
+            <p>MultiReplacer</p>
           </a>
           <a href="./highlight-string" className="card">
             <h3>Highlight String &rarr;</h3>
-            <p>
-              Instantly Highlight String by number
-            </p>
+            <p>Instantly Highlight String by number</p>
           </a>
           <a href="./create-num-string" className="card">
             <h3>CreateNumString &rarr;</h3>

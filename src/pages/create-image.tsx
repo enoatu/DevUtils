@@ -1,8 +1,19 @@
 import { useState, useEffect, useRef } from 'react'
 import Layout from '@c/Layout'
-import ExtraOptions from '@c/utils//ExtraOptions'
+import AdditionalOptions from '@c/utils/AdditionalOptions'
+import { useTranslation } from 'react-i18next'
 
 export default function CreateImage() {
+  const { t, i18n } = useTranslation('create-image')
+  i18n.addResourceBundle('ja', 'create-image', {
+    'height': '高さ',
+    'width': '横幅',
+    'text': 'テキスト',
+    'text size': 'テキストサイズ',
+    'text color': 'テキストの色',
+    'background color:': '背景の色',
+    'Click Image for download!': '画像をクリックしてダウンロード',
+  })
   const [width, setWidth] = useState(300)
   const [height, setHeight] = useState(300)
   const [text, setText] = useState('')
@@ -57,15 +68,14 @@ export default function CreateImage() {
     draw()
   }, [width, height, text, textSize, textColor, bgColor])
 
-  const title = 'create image'
-  const description = 'Development Utils'
   return (
-    <Layout title={title}>
+    <Layout title={t('title')}>
       <main>
-        <h1 className="title">{title}</h1>
-        <p className="description">{description}</p>
+        <h1 className="title">{t('title')}</h1>
+        <p className="description">{t('description')}</p>
+
         <div>
-          <p>width</p>
+          <p>{t('width')}</p>
           <input
             type="number"
             className="num-box"
@@ -74,7 +84,7 @@ export default function CreateImage() {
           />
         </div>
         <div>
-          <p>height</p>
+          <p>{t('height')}</p>
           <input
             type="number"
             className="num-box"
@@ -82,9 +92,9 @@ export default function CreateImage() {
             onChange={(e) => setHeight(parseInt(e.target.value))}
           />
         </div>
-        <ExtraOptions>
+        <AdditionalOptions>
           <div>
-            <p>text</p>
+            <p>{t('text')}</p>
             <input
               type="text"
               className="text-box"
@@ -93,7 +103,7 @@ export default function CreateImage() {
             />
           </div>
           <div>
-            <p>text size</p>
+            <p>{t('text size')}</p>
             <select
               className="num-box"
               value={textSize}
@@ -104,7 +114,7 @@ export default function CreateImage() {
             </select>
           </div>
           <div>
-            <p>text color</p>
+            <p>{t('text color')}</p>
             <input
               type="text"
               className="text-box"
@@ -113,7 +123,7 @@ export default function CreateImage() {
             />
           </div>
           <div>
-            <p>background color</p>
+            <p>{t('background color')}</p>
             <input
               type="text"
               className="text-box"
@@ -121,8 +131,8 @@ export default function CreateImage() {
               onChange={(e) => setBgColor(e.target.value)}
             />
           </div>
-        </ExtraOptions>
-        <p>Click Image for download!</p>
+        </AdditionalOptions>
+        <p>{t('Click Image for download!')}</p>
         <canvas
           ref={canvasRef}
           width={width}
