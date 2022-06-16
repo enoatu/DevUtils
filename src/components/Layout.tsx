@@ -24,8 +24,9 @@ export default function Layout({
     })`,
   }
   const { i18n } = useTranslation()
-  const toggleLocale = () => {
-    i18n.changeLanguage(i18n.language === 'en' ? 'ja' : 'en')
+  const toggleLocale = async () => {
+    await i18n.changeLanguage(i18n.language === 'en' ? 'ja' : 'en')
+    typeof window === 'undefined' || sessionStorage.setItem('lang', i18n.language)
   }
   return (
     <div className="container">

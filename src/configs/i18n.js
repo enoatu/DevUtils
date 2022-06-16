@@ -24,7 +24,9 @@ const resources = {
   },
 }
 
-let lang = sessionStorage && sessionStorage.getItem('lang')
+const isSSR = typeof window === 'undefined'
+
+let lang = isSSR || sessionStorage.getItem('lang')
 if (!['ja', 'en'].includes(lang)) {
   lang = 'en'
 }
@@ -35,8 +37,6 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
-}, (err, t) => {
-  sessionStorage && sessionStorage.setItem('lang', lang)
 })
 
 export default i18n
