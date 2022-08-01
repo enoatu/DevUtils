@@ -11,6 +11,10 @@ const resources = {
       'title': 'Image Creation Tools',
       'description': 'Create an image by specifying height, width, etc.',
     },
+    'change-indent': {
+      'title': 'Change Indent',
+      'description': 'Change indentation to 2 => 4, etc.',
+    },
   },
   ja: {
     'common': {
@@ -20,6 +24,10 @@ const resources = {
     'create-image': {
       'title': '画像作成ツール',
       'description': '高さや横幅などを指定して、画像を作成します',
+    },
+    'change-indent': {
+      'title': '字下げ(インデント)変更ツール',
+      'description': '字下げ(インデント)を2 => 4 などに変更します',
     },
   },
 }

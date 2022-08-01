@@ -72,6 +72,10 @@ export default function Home() {
               Instantly deploy your Next.js site to a public URL with Vercel.
             </p>
           </a>
+          <a href="./change-indent" className="card">
+            <h3>{t('title', { ns: 'change-indent' })} &rarr;</h3>
+            <p>{t('description', { ns: 'change-indent'})}</p>
+          </a>
           <a href="./utf16-decoder" className="card">
             <h3>utf16 decoder &rarr;</h3>
             <p>
