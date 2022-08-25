@@ -77,10 +77,8 @@ export default function Home() {
             <p>{t('description', { ns: 'change-indent'})}</p>
           </a>
           <a href="./utf16-decoder" className="card">
-            <h3>utf16 decoder &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
+          <h3>{t('title', { ns: 'utf16-decoder' })} &rarr;</h3>
+            <p>{t('description', { ns: 'utf16-decoder' })}</p>
           </a>
         </div>
       </main>

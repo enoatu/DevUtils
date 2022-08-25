@@ -15,6 +15,10 @@ const resources = {
       'title': 'Change Indent',
       'description': 'Change indentation to 2 => 4, etc.',
     },
+    'utf16-decoder': {
+      'title': 'UTF-16 Decoder',
+      'description': 'Decode UTF-16 Characters',
+    },
   },
   ja: {
     'common': {
@@ -28,6 +32,10 @@ const resources = {
     'change-indent': {
       'title': '字下げ(インデント)変更ツール',
       'description': '字下げ(インデント)を2 => 4 などに変更します',
+    },
+    'utf16-decoder': {
+      'title': 'UTF-16デコードツール',
+      'description': 'UTF-16の文字列をデコードします',
     },
   },
 }

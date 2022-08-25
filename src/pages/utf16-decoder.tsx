@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Layout from '@c/Layout'
 import chartable from '@/utils/chartable'
+import { useTranslation } from 'react-i18next'
 
 interface CharTableObject {
   [text: string]: string
@@ -8,11 +9,17 @@ interface CharTableObject {
 
 export default function DecoderApp() {
   const [source, setSource] = useState(
-    'nickname => \\x{30d9}\\x{30b8}\\x{30bf}\\x{30d6}\\x{30eb}'
+    'sample => \\x{30d9}\\x{30b8}\\x{30bf}\\x{30d6}\\x{30eb} or \\u30c6\\u30b9\\u30c8'
   )
   const [result, setResult] = useState('')
 
-  const ctj = chartable
+  const { t, i18n } = useTranslation('utf16-decoder')
+  i18n.addResourceBundle('ja', 'utf16-decoder', {
+    'decode': 'デコード',
+    'source': 'ソース'
+  })
+
+  const ctj = useMemo(() => chartable
     .split('\n')
     .reduce((acc: CharTableObject, line: string) => {
       const arr = line.split(' ')
@@ -20,32 +27,32 @@ export default function DecoderApp() {
       const utf16 = arr[1]
       acc[utf16] = text
       return acc
-    }, {})
+    }, {}), [])
 
   const replace = (): void => {
     const result = source.replaceAll(
-      /\\x{(\w{4})}/g,
-      (_, hex) => ctj[hex] || ctj[hex.toUpperCase()] || 'FAIL'
+      /\\x{(\w{4})}|\\u(\w{4})/g,
+      (_, candidate0, candidate1) => {
+        const hex = candidate0 || candidate1
+        return ctj[hex] || ctj[hex.toUpperCase()] || 'FAIL'
+      }
     )
     setResult(result)
   }
-  const title = 'UTF16 Decoder'
-  const description = 'Development Utils'
-
   return (
-    <Layout title={title}>
+    <Layout title={t('title')}>
       <main>
-        <h1 className="title">{title}</h1>
-        <p className="description">{description}</p>
+        <h1 className="title">{t('title')}</h1>
+        <p className="description">{t('description')}</p>
         <div>
-          <p>source</p>
+          <p>{t('source')}</p>
           <textarea
             className="source-box"
             value={source}
             onChange={(e) => setSource(e.target.value)}
           />
         </div>
-        <button onClick={replace}>replace</button>
+        <button onClick={replace}>{t('decode')}</button>
         <div>
           <textarea className="result-box" value={result} readOnly />
         </div>

@@ -10,7 +10,7 @@ type Props = {
 
 export default function Layout({
   children,
-  title = 'This is the default title',
+  title = '',
 }: Props) {
   const gaId = process.env.NEXT_PUBLIC_GA_ID
   const gaURL = `https://www.googletagmanager.com/gtag/js?id=${gaId}`
