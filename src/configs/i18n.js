@@ -26,7 +26,7 @@ const resources = {
   },
   ja: {
     'common': {
-      'title': '開発ツール',
+      'title': 'DevUtils',
       'description': '開発者向けサポートツール',
     },
     'create-image': {

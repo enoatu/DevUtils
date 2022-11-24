@@ -23,7 +23,7 @@ export default function Layout({
       page_path: window.location.pathname,
     })`,
   }
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const toggleLocale = async () => {
     await i18n.changeLanguage(i18n.language === 'en' ? 'ja' : 'en')
     typeof window === 'undefined' || sessionStorage.setItem('lang', i18n.language)
@@ -41,16 +41,37 @@ export default function Layout({
         <title>DevUtils | {title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <button onClick={toggleLocale}>
-        Change Language {i18n.language} &gt;{' '}
-        {i18n.language === 'en' ? 'ja' : 'en'}
-      </button>
-
+      <header>
+        <a className="abs" href="/">
+          <p id="logo" className="title">{t('title', { ns: 'common' })}</p>
+        </a>
+        <button onClick={toggleLocale}>
+          Change Language {i18n.language} &gt;{' '}
+          {i18n.language === 'en' ? 'ja' : 'en'}
+        </button>
+      </header>
       {children}
 
       <Footer />
 
       <style jsx>{`
+        header {
+          display: flex;
+          position: absolute;
+          width: 100%;
+          justify-content: space-between;
+          top: 0;
+          padding: 0 1rem;
+        }
+        #logo {
+          font-size: 2rem;
+          margin: 0;
+          padding: 0;
+        }
+        .abs {
+          display: block;
+          text-decoration: none;
+        }
         .container {
           min-height: 100vh;
           padding: 0 0.5rem;
@@ -62,8 +83,7 @@ export default function Layout({
       `}</style>
 
       <style jsx global>{`
-        html,
-        body {
+        html, body {
           padding: 0;
           margin: 0;
           font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
