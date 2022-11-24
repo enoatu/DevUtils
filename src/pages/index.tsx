@@ -57,19 +57,19 @@ export default function Home() {
           <a href="./create-num-string" className="card">
             <h3>CreateNumString &rarr;</h3>
             <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+            CreateNumString
             </p>
           </a>
           <a href="./merge-text" className="card">
             <h3>MergeText &rarr;</h3>
             <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+            merge text
             </p>
           </a>
           <a href="./merge-text-for-sql" className="card">
             <h3>MergeText For SQL &rarr;</h3>
             <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+             mereg text for sql
             </p>
           </a>
           <a href="./change-indent" className="card">
@@ -79,6 +79,10 @@ export default function Home() {
           <a href="./utf16-decoder" className="card">
           <h3>{t('title', { ns: 'utf16-decoder' })} &rarr;</h3>
             <p>{t('description', { ns: 'utf16-decoder' })}</p>
+          </a>
+          <a href="./insert-sql-viewer" className="card">
+          <h3>{t('title', { ns: 'insert-sql-viewer' })} &rarr;</h3>
+            <p>{t('description', { ns: 'insert-sql-viewer' })}</p>
           </a>
         </div>
       </main>

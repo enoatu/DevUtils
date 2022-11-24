@@ -19,6 +19,10 @@ const resources = {
       'title': 'UTF-16 Decoder',
       'description': 'Decode UTF-16 Characters',
     },
+    'insert-sql-viewer': {
+      'title': 'INSERT SQL Viewer',
+      'description': 'View INSERT SQL',
+    },
   },
   ja: {
     'common': {
@@ -36,6 +40,10 @@ const resources = {
     'utf16-decoder': {
       'title': 'UTF-16デコードツール',
       'description': 'UTF-16の文字列をデコードします',
+    },
+    'insert-sql-viewer': {
+      'title': 'INSERT SQLビューワー',
+      'description': '長い INSERT SQLを見やすくします',
     },
   },
 }
