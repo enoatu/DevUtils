@@ -12,12 +12,14 @@ export default function ReplacerApp() {
   })
 
   const onChange = () => {
-    const matches = source.match(/INSERT .*\((.*)\).*\((.*)\)/s)
+    const matches = source.match(/.*INSERT .*\((.*)\).*\((.*)\)/s)
     let text = 'SQLが不正です'
-    if (matches?.[1] && matches?.[2] && matches[1].length === matches[2].length) {
+    if (matches?.[1] && matches?.[2]) {
       const columns = matches[1].split(',').map((column) => column.trim())
       const values = matches[2].split(',').map((value) => value.trim())
-      text = columns.map((column, index) => `${column} = ${values[index]}`).join("\n")
+      if (columns.length === values.length) {
+        text = columns.map((column, index) => `${column} = ${values[index]}`).join("\n")
+      }
     }
     setResult(text)
   }
