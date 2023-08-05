@@ -8,10 +8,25 @@ import 'react-calendar/dist/Calendar.css'
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece]
 
+const fmt = (date: Date) => {
+  // 2021/01/11 の形式に変換する
+  // 0埋めする
+  const year = date.getFullYear()
+  const month = ('0' + (date.getMonth() + 1)).slice(-2)
+  const day = ('0' + date.getDate()).slice(-2)
+  return `${year}/${month}/${day}`
+}
+
+const displayFmt = (date: Date) => {
+  // 2021/01/11(月) の形式に変換する
+  const fmtDate = fmt(date)
+  return `${fmtDate}(${['日', '月', '火', '水', '木', '金', '土'][date.getDay()]})`
+}
+
 type RawHolidays= {[key: string]:string }
 const useHoliday = (): [string[], RawHolidays, Boolean, (arg: Boolean) => void] => {
   const [rawHolidays, setRawHolidays] = usePersistState<RawHolidays>({ key: 'rawHolidays', initialValue: {} })
-  const [isRestHoliday, setIsRestHoliday] = usePersistState<Boolean>({ key: 'isRestHoliday', initialValue: false })
+  const [isRestHoliday, setIsRestHoliday] = usePersistState<Boolean>({ key: 'isRestHoliday', initialValue: true })
   const getRawHolidays = async () => {
     const res = await fetch('https://holidays-jp.github.io/api/v1/date.json')
     if (!res.ok) {
@@ -44,31 +59,23 @@ export default function CalendarManHours() {
   })
 
   const [value, change] = useState<Value>(new Date())
-  const fmt = (date: Date) => {
-    // 2021/01/11 の形式に変換する
-    // 0埋めする
-    const year = date.getFullYear()
-    const month = ('0' + (date.getMonth() + 1)).slice(-2)
-    const day = ('0' + date.getDate()).slice(-2)
-    return `${year}/${month}/${day}`
-  }
-  const [startDate, changeStartDate] = usePersistState<Value>({ key: 'startDate', initialValue: new Date() })
-
-  const [isRestWeekend, setIsRestWeekend] = usePersistState<Boolean>({ key: 'isRestWeekend', initialValue: false })
+  const [startDate, changeStartDate] = usePersistState<Value>({ key: 'startDate', initialValue: new Date(new Date().toDateString()) }) // 0時にする
+  const [isRestWeekend, setIsRestWeekend] = usePersistState<Boolean>({ key: 'isRestWeekend', initialValue: true })
   const [holidays, rawHolidays, isRestHoliday, setIsRestHoliday] = useHoliday()
-
   const [isSettingStartDate, changeIsSettingStartDate] = useState<boolean>(false)
-
-  const tasks = [
-    {
-      name: 'task1',
-      days: 3,
-    },
-    {
-      name: 'ラーメンtask2',
-      days: 5,
-    },
-  ]
+  const [tasks, changeTasks] = usePersistState<{name: string, days: number}[]>({
+    key: 'tasks',
+    initialValue: [
+      {
+        name: '準備',
+        days: 3,
+      },
+      {
+        name: '実行',
+        days: 5,
+      },
+    ]
+  })
 
   const restDays = {
   }
@@ -101,28 +108,27 @@ export default function CalendarManHours() {
     for (const task of tasks) {
       // restDaysに含まれている日はスキップする
       [...Array(task.days).keys()].forEach((i) => {
-        // console.log(task.name + 'の' + (i + 1) + '日目'+ fmt(end))
+        console.log(task.name + 'の' + (i + 1) + '日目'+ fmt(end))
         if (isRestDay(fmt(end))) {
             while (isRestDay(fmt(end))) {
-             // console.log(fmt(end) + 'は休みなのでスキップします')
+             console.log(fmt(end) + 'は休みなのでスキップします')
              end.setDate(end.getDate() + 1)
-             // console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
+             console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
             }
         } else {
           end.setDate(end.getDate() + 1)
-          // console.log(fmt(start) + 'から' + fmt(end))
+          console.log(fmt(start) + 'から' + fmt(end))
         }
       })
       // end.setDate(end.getDate() + task.days - 1)
       result.push({...task, start: new Date(start), end: new Date(end)})
-      // 開始日と終了日を1日ずつずらす
+      // 開始日を1日進め、終了日を開始日と同じにする
       start = new Date(end)
       start.setDate(start.getDate() + 1)
-      end = new Date(end)
-      end.setDate(end.getDate() + 1)
+      end = new Date(start)
     }
     changeComputedTasks(result)
-  }, [JSON.stringify(tasks), startDate])
+  }, [JSON.stringify(tasks), startDate, isRestWeekend, isRestHoliday])
 
   return (
     <Layout title={t('title')}>
@@ -149,7 +155,7 @@ export default function CalendarManHours() {
           <ul>
             {computedTasks.map((t) => {
               return (
-                <li>{t.name} {fmt(t.start)} ~ {fmt(t.end)}</li>
+                <li>{t.name} {t.days}日 {displayFmt(t.start)} ~ {displayFmt(t.end)}</li>
               )
             })}
           </ul>
@@ -162,7 +168,7 @@ export default function CalendarManHours() {
               { view === 'month' && rawHolidays[fmt(date)] && <p style={{'color': 'red'}}>{rawHolidays[fmt(date)]}</p> }
               { view === 'month' && computedTasks.map((t) => {
                 // タスク名
-                if (!isRestDay(fmt(date)) && date >= t.start && date <= t.end) {
+                if (!isRestDay(fmt(date)) && t.start <= date && date <= t.end) {
                   return <p>{t.name}</p>
                 }
               })}
