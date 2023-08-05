@@ -1,0 +1,43 @@
+import { useCallback, useState } from "react";
+
+type Props<T> = {
+    key: string;
+    initialValue: T;
+    type?: string;
+};
+
+type Result<T> = readonly [T, (v: T) => void];
+
+export const usePersistState = <T>({ key, initialValue }: Props<T>): Result<T> => {
+  const cast = (key: string, value: T): T => {
+    switch (key) {
+      case "startDate":
+        return new Date(value as string) as T;
+      default:
+        return value;
+    }
+  }
+  const getItemFromStorage = <T>(key: string, defaultValue?: T) => {
+    try {
+      const val = JSON.parse(localStorage.getItem(key) + "");
+      if (val !== null) {
+        return cast(key, val);
+      }
+      return localStorage.setItem(key, JSON.stringify(defaultValue));
+    } catch {
+      return defaultValue;
+    }
+  };
+
+  const [state, setState] = useState<T>(getItemFromStorage<T>(key, initialValue) as T);
+
+  const setValue = useCallback(
+    (value: T) => {
+      localStorage.setItem(key, JSON.stringify(value));
+      setState(value);
+    },
+    [key]
+  );
+
+  return [state, setValue] as const;
+};
