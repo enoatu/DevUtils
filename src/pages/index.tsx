@@ -72,6 +72,18 @@ export default function Home() {
              mereg text for sql
             </p>
           </a>
+          <a href="./format-create-table" className="card">
+            <h3>Format CREATE TABLE For MySQL &rarr;</h3>
+            <p>
+             mereg text for sql
+            </p>
+          </a>
+          <a href="./calendar-man-hours" className="card">
+            <h3>calendar-man-hours &rarr;</h3>
+            <p>
+             calendar-man-hours
+            </p>
+          </a>
           <a href="./change-indent" className="card">
             <h3>{t('title', { ns: 'change-indent' })} &rarr;</h3>
             <p>{t('description', { ns: 'change-indent'})}</p>

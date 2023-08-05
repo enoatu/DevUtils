@@ -23,6 +23,10 @@ const resources = {
       'title': 'INSERT SQL Viewer',
       'description': 'View INSERT SQL',
     },
+    'calendar-man-hours': {
+      'title': 'calendar-man-hours',
+      'description': 'calendar-man-hours',
+    },
   },
   ja: {
     'common': {
@@ -44,6 +48,10 @@ const resources = {
     'insert-sql-viewer': {
       'title': 'INSERT SQLビューワー',
       'description': '長い INSERT SQLを見やすくします',
+    },
+    'calendar-man-hours': {
+      'title': '工数カレンダー',
+      'description': '工数をカレンダーに入れて管理します',
     },
   },
 }

@@ -29,6 +29,7 @@
     "i18next": "^21.8.8",
     "next": "latest",
     "react": "^17.0.1",
+    "react-calendar": "^4.6.0",
     "react-dom": "^17.0.1",
     "react-i18next": "^11.17.0"
   },
