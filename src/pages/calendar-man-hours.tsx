@@ -1,25 +1,65 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { usePersistState } from '@/hooks/usePersistState'
 import Layout from '@c/Layout'
 import { useTranslation } from 'react-i18next'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 
+type ValuePiece = Date | null;
+type Value = ValuePiece | [ValuePiece, ValuePiece]
+
+type RawHolidays= {[key: string]:string }
+const useHoliday = (): [string[], RawHolidays, Boolean, (arg: Boolean) => void] => {
+  const [rawHolidays, setRawHolidays] = usePersistState<RawHolidays>({ key: 'rawHolidays', initialValue: {} })
+  const [isRestHoliday, setIsRestHoliday] = usePersistState<Boolean>({ key: 'isRestHoliday', initialValue: false })
+  const getRawHolidays = async () => {
+    const res = await fetch('https://holidays-jp.github.io/api/v1/date.json')
+    if (!res.ok) {
+      throw new Error('Network response was not ok')
+    }
+    const json = await res.json()
+    // key が 2021-01-01 の形式なので 2021/01/01 に変換する
+    const result = {} as RawHolidays
+    for (const key of Object.keys(json)) {
+      const k = key.replace(/-/g, '/')
+      result[k] = json[key]
+    }
+    return result
+  }
+  useEffect(() => {
+    (async () => {
+    if (Object.keys(rawHolidays).length === 0) {
+      setRawHolidays(await getRawHolidays())
+    }
+    })()
+  }, [])
+  const holidays = Object.keys(rawHolidays).map((key) => key)
+  return [holidays, rawHolidays, isRestHoliday, setIsRestHoliday]
+}
+
 export default function CalendarManHours() {
   const { t, i18n } = useTranslation('calendar-man-hours')
-  type ValuePiece = Date | null;
-  type Value = ValuePiece | [ValuePiece, ValuePiece]
-  const [value, change] = useState<Value>(new Date())
-  const fmt = (date: Date) => {
-    console.log(date, typeof date)
-    return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
-  }
   i18n.addResourceBundle('ja', 'calendar-man-hours', {
     'Change indent': 'インデント変更',
   })
+
+  const [value, change] = useState<Value>(new Date())
+  const fmt = (date: Date) => {
+    // 2021/01/11 の形式に変換する
+    // 0埋めする
+    const year = date.getFullYear()
+    const month = ('0' + (date.getMonth() + 1)).slice(-2)
+    const day = ('0' + date.getDate()).slice(-2)
+    return `${year}/${month}/${day}`
+  }
   const [startDate, changeStartDate] = usePersistState<Value>({ key: 'startDate', initialValue: new Date() })
+
+  const [isRestWeekend, setIsRestWeekend] = usePersistState<Boolean>({ key: 'isRestWeekend', initialValue: false })
+  const [holidays, rawHolidays, isRestHoliday, setIsRestHoliday] = useHoliday()
+
   const [isSettingStartDate, changeIsSettingStartDate] = useState<boolean>(false)
-  const task = [
+
+  const tasks = [
     {
       name: 'task1',
       days: 3,
@@ -29,9 +69,60 @@ export default function CalendarManHours() {
       days: 5,
     },
   ]
-  const restDays = [
-    new Date(2021, 0, 1),
-  ]
+
+  const restDays = {
+  }
+
+  const isRestDay = (date: string) => {
+    if (isRestWeekend && (new Date(date).getDay() === 0 || new Date(date).getDay() === 6)) {
+      return true
+    }
+    if (isRestHoliday && holidays.includes(date)) {
+      return true
+    }
+    if (Object.keys(restDays).includes(date)) {
+      return true
+    }
+    return false
+  }
+
+  type ComputedTask = {
+    name: string,
+    days: number,
+    start: Date,
+    end: Date,
+  }
+  const [computedTasks, changeComputedTasks] = useState<ComputedTask[]>([])
+
+  useEffect(() => {
+    let start = new Date(startDate as Date)
+    let end = new Date(startDate as Date)
+    const result = []
+    for (const task of tasks) {
+      // restDaysに含まれている日はスキップする
+      [...Array(task.days).keys()].forEach((i) => {
+        // console.log(task.name + 'の' + (i + 1) + '日目'+ fmt(end))
+        if (isRestDay(fmt(end))) {
+            while (isRestDay(fmt(end))) {
+             // console.log(fmt(end) + 'は休みなのでスキップします')
+             end.setDate(end.getDate() + 1)
+             // console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
+            }
+        } else {
+          end.setDate(end.getDate() + 1)
+          // console.log(fmt(start) + 'から' + fmt(end))
+        }
+      })
+      // end.setDate(end.getDate() + task.days - 1)
+      result.push({...task, start: new Date(start), end: new Date(end)})
+      // 開始日と終了日を1日ずつずらす
+      start = new Date(end)
+      start.setDate(start.getDate() + 1)
+      end = new Date(end)
+      end.setDate(end.getDate() + 1)
+    }
+    changeComputedTasks(result)
+  }, [JSON.stringify(tasks), startDate])
 
   return (
     <Layout title={t('title')}>
@@ -44,40 +135,43 @@ export default function CalendarManHours() {
           <button onClick={() =>changeIsSettingStartDate(!isSettingStartDate)}>
             {isSettingStartDate ? '設定終了' : '設定開始'}
           </button>
+          <p onClick={() => setIsRestWeekend(!isRestWeekend)}>土日を休みとする: {isRestWeekend ? 'はい' : 'いいえ'}</p>
+          <p onClick={() => setIsRestHoliday(!isRestHoliday)}>祝日を休みとする: {isRestHoliday ? 'はい' : 'いいえ'}</p>
           {isSettingStartDate &&
             <Calendar
               onChange={(value, event) => {
-                console.log(value, event)
                 changeStartDate(value)
                 changeIsSettingStartDate(false)
               }}
               value={startDate}
             />
           }
+          <ul>
+            {computedTasks.map((t) => {
+              return (
+                <li>{t.name} {fmt(t.start)} ~ {fmt(t.end)}</li>
+              )
+            })}
+          </ul>
         </div>
         <Calendar
           onChange={change}
           value={value}
           tileContent={({ date, view }) =>
             <div className="date-box">
-              { view === 'month' && task.map((t) => {
-                const start = new Date(startDate as Date)
-                const end = new Date(startDate as Date)
-                end.setDate(end.getDate() + t.days)
-                if (date >= start && date <= end) {
+              { view === 'month' && rawHolidays[fmt(date)] && <p style={{'color': 'red'}}>{rawHolidays[fmt(date)]}</p> }
+              { view === 'month' && computedTasks.map((t) => {
+                // タスク名
+                if (!isRestDay(fmt(date)) && date >= t.start && date <= t.end) {
                   return <p>{t.name}</p>
                 }
               })}
-              { view === 'month' && restDays.map((d) => {
-                if (date === d) {
+              {/* view === 'month' && restDays.map((d) => {
+                // 休み
+                if (date.toString() === d) {
                   return <p>休み</p>
                 }
-              })}
-              { view === 'month' && date.getDay() === 0 ? 
-                <p>It's Sunday!</p>
-                :
-                <p/>
-              }
+              })*/}
             </div>
           }
           />
