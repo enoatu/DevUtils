@@ -1,4 +1,4 @@
-import { useState, useEffect, forwardRef } from 'react'
+import { useState, useEffect } from 'react'
 import { usePersistState } from '@/hooks/usePersistState'
 import Layout from '@c/Layout'
 import { useTranslation } from 'react-i18next'
@@ -17,12 +17,6 @@ const fmt = (date: Date) => {
   const month = ('0' + (date.getMonth() + 1)).slice(-2)
   const day = ('0' + date.getDate()).slice(-2)
   return `${year}/${month}/${day}`
-}
-
-const displayFmt = (date: Date) => {
-  // 2021/01/11(月) の形式に変換する
-  const fmtDate = fmt(date)
-  return `${fmtDate}(${['日', '月', '火', '水', '木', '金', '土'][date.getDay()]})`
 }
 
 type RawHolidays= {[key: string]:string }
@@ -183,11 +177,12 @@ export default function CalendarManHours() {
     return false
   }
 
-  useEffect(() => {
+  const updateTasks = (newTasks?:Task[]) => {
+    console.log('tasksが更新されました')
     let start = new Date(startDate as Date)
     let end = new Date(startDate as Date)
     const result = []
-    for (const task of tasks) {
+    for (const task of (newTasks || tasks)) {
       // restDaysに含まれている日はスキップする
       for (let i = 0; i < task.days; i++) {
         // console.log(task.name + 'の' + (i + 1) + '日目'+ fmt(end))
@@ -210,11 +205,10 @@ export default function CalendarManHours() {
       end = new Date(start)
     }
     changeTasks(result)
-  }, [JSON.stringify(tasks), startDate, isRestWeekend, isRestHoliday, userRestDays])
-
-  const sortableTag = forwardRef<HTMLDivElement, any>((props, ref) => {
-    return <div ref={ref}>{props.children}</div>;
-  });
+  }
+  useEffect(() => {
+    updateTasks()
+  }, [startDate, isRestWeekend, isRestHoliday, userRestDays])
 
   const editTaskName = (id: number, name: string) => {
     const newTasks = tasks.map(task => {
@@ -236,6 +230,11 @@ export default function CalendarManHours() {
         }
         return task
     })
+    changeTasks(newTasks)
+  }
+
+  const deleteTask = (id: number) => {
+    const newTasks = tasks.filter(task => task.id !== id)
     changeTasks(newTasks)
   }
 
@@ -264,11 +263,12 @@ export default function CalendarManHours() {
                 <div className="task-item task-header">かかる日数</div>
                 <div className="task-item task-header">開始日<br/>(自動作成)</div>
                 <div className="task-item task-header">終了日<br/>(自動作成)</div>
-                <div className="task-item task-header"></div>
+                <div className="task-item task-header">並替</div>
+                <div className="task-item task-header">編集</div>
               </div>
             </div>
             <div className="task-list">
-              <ReactSortable list={tasks} setList={(c) => changeTasks(c)}>
+              <ReactSortable list={tasks} setList={(c) => updateTasks(c) }>
                 {tasks.map((t) => (
                   <div key={t.id} className="task-item-wrapper">
                     <div className="task-item">
@@ -280,6 +280,7 @@ export default function CalendarManHours() {
                     <div className="task-item">{fmt(t.start)}</div>
                     <div className="task-item">{fmt(t.end)}</div>
                     <div className="task-item">☰</div>
+                    <div className="task-item"><button onClick={() => deleteTask(t.id)}>削除</button></div>
                   </div>
                 ))}
               </ReactSortable>
@@ -403,16 +404,24 @@ export default function CalendarManHours() {
           text-align: right;
           background-color: #cff0f0;
         }
-        .task-header.task-item:nth-child(2) {
-        }
-        .task-item:last-child {
-          justify-content: center;
+
+        .task-item:nth-child(5) {
+          flex: 1;
           font-size: 50px;
+          cursor: move;
           color: #ddd;
           padding-bottom: 5px;
-          cursor: move;
-          flex: 1;
         }
+        .task-header.task-item:nth-child(5) {
+          font-size: 16px;
+          color: #000;
+        }
+        .task-item:nth-child(6) {
+          flex: 1;
+          text-align: center;
+        }
+
+
       `}</style>
     </Layout>
   )
