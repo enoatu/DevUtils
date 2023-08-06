@@ -4,6 +4,7 @@ import Layout from '@c/Layout'
 import { useTranslation } from 'react-i18next'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
+import {t} from 'i18next'
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece]
@@ -52,6 +53,68 @@ const useHoliday = (): [string[], RawHolidays, Boolean, (arg: Boolean) => void] 
   return [holidays, rawHolidays, isRestHoliday, setIsRestHoliday]
 }
 
+type StartDateSettingProps = {
+  startDate: Value,
+  changeStartDate: (arg: Value) => void,
+}
+const StartDateSetting = ({ startDate, changeStartDate }: StartDateSettingProps) => {
+  const [isSettingStartDate, changeIsSettingStartDate] = useState<boolean>(false)
+  return (
+    <>
+      <p>開始日: {startDate ? fmt(startDate as Date) : '未設定'}</p>
+      <button onClick={() => changeIsSettingStartDate(!isSettingStartDate)}>
+        {isSettingStartDate ? '設定終了' : '設定開始'}
+      </button>
+      {isSettingStartDate &&
+        <Calendar
+          onChange={(value) => {
+            changeStartDate(value)
+            changeIsSettingStartDate(false)
+          }}
+          value={startDate}
+        />
+      }
+    </>
+  )
+}
+
+type UserRestDaysSettingProps = {
+  userRestDays: UserRestDays,
+  setUserRestDays: (arg: UserRestDays) => void,
+  rawHolidays: RawHolidays,
+}
+const UserRestDaysSetting = ({ userRestDays, setUserRestDays, rawHolidays }: UserRestDaysSettingProps) => {
+  const [isSettingUserRestDays, changeIsSettingUserRestDays] = useState<boolean>(false)
+  return (
+    <>
+      <button onClick={() => changeIsSettingUserRestDays(!isSettingUserRestDays)}>
+        {isSettingUserRestDays ? '設定終了' : '設定開始'}
+      </button>
+      {isSettingUserRestDays &&
+        <Calendar
+          onChange={(value) => {
+            if (value instanceof Date) {
+              const date = fmt(value)
+              if (userRestDays[date]) {
+                const { [date]: _, ...rest } = userRestDays
+                setUserRestDays(rest)
+              } else {
+                setUserRestDays({...userRestDays, [date]: '休み'})
+              }
+            }
+          }}
+          tileContent={({ date, view }) =>
+            <div className="date-box">
+              { view === 'month' && rawHolidays[fmt(date)] && <p style={{'color': 'red'}}>{rawHolidays[fmt(date)]}</p> }
+              { view === 'month' && userRestDays[fmt(date)] && <p style={{'color': 'yellow'}}>😑💤</p> }
+            </div>
+          }
+        />
+      }
+    </>
+  )
+}
+
 type UserRestDays = { [key: string]: string }
 
 export default function CalendarManHours() {
@@ -64,9 +127,7 @@ export default function CalendarManHours() {
   const [startDate, changeStartDate] = usePersistState<Value>({ key: 'startDate', initialValue: new Date(new Date().toDateString()) }) // 0時にする
   const [isRestWeekend, setIsRestWeekend] = usePersistState<Boolean>({ key: 'isRestWeekend', initialValue: true })
   const [holidays, rawHolidays, isRestHoliday, setIsRestHoliday] = useHoliday()
-  const [isSettingUserRestDays, changeIsSettingUserRestDays] = useState<boolean>(false)
   const [userRestDays, setUserRestDays] = usePersistState<UserRestDays>({ key: 'userRestDays', initialValue: {}})
-  const [isSettingStartDate, changeIsSettingStartDate] = useState<boolean>(false)
   const [tasks, changeTasks] = usePersistState<{name: string, days: number}[]>({
     key: 'tasks',
     initialValue: [
@@ -145,48 +206,17 @@ export default function CalendarManHours() {
         <p className="description">{t('description')}</p>
         <p className="comment">{t('now, you can change only 2 indent to 4 indent')}</p>
         <div>
-          <p>開始日: {startDate ? fmt(startDate as Date) : '未設定'}</p>
-          <button onClick={() => changeIsSettingStartDate(!isSettingStartDate)}>
-            {isSettingStartDate ? '設定終了' : '設定開始'}
-          </button>
-          {isSettingStartDate &&
-            <Calendar
-              onChange={(value, event) => {
-                changeStartDate(value)
-                changeIsSettingStartDate(false)
-              }}
-              value={startDate}
-            />
-          }
+          <StartDateSetting startDate={startDate} changeStartDate={changeStartDate} />
           <p>その他休み設定: {Object.keys(userRestDays).length ? Object.keys(userRestDays).forEach(key => {
             return <p>{key}</p>
           }) : '未設定'}</p>
-          <button onClick={() => changeIsSettingUserRestDays(!isSettingUserRestDays)}>
-            {isSettingUserRestDays ? '設定終了' : '設定開始'}
-          </button>
-          {isSettingUserRestDays &&
-            <Calendar
-              onChange={(value, event) => {
-                if (value instanceof Date) {
-                  const date = fmt(value)
-                  if (userRestDays[date]) {
-                    const { [date]: _, ...rest } = userRestDays
-                    setUserRestDays(rest)
-                  } else {
-                    setUserRestDays({...userRestDays, [date]: '休み'})
-                  }
-                }
-              }}
-              tileContent={({ date, view }) =>
-                <div className="date-box">
-                  { view === 'month' && rawHolidays[fmt(date)] && <p style={{'color': 'red'}}>{rawHolidays[fmt(date)]}</p> }
-                  { view === 'month' && userRestDays[fmt(date)] && <p style={{'color': 'yellow'}}>😑💤</p> }
-                </div>
-              }
-            />
-          }
           <p onClick={() => setIsRestWeekend(!isRestWeekend)}>土日を休みとする: {isRestWeekend ? 'はい' : 'いいえ'}</p>
           <p onClick={() => setIsRestHoliday(!isRestHoliday)}>祝日を休みとする: {isRestHoliday ? 'はい' : 'いいえ'}</p>
+          <UserRestDaysSetting
+            userRestDays={userRestDays}
+            setUserRestDays={setUserRestDays}
+            rawHolidays={rawHolidays}
+          />
           <ul>
             {computedTasks.map((t) => {
               return (
