@@ -31,13 +31,16 @@
     "react": "^17.0.1",
     "react-calendar": "^4.6.0",
     "react-dom": "^17.0.1",
-    "react-i18next": "^11.17.0"
+    "react-i18next": "^11.17.0",
+    "react-sortablejs": "6.1.1",
+    "sortablejs": "^1.15.0"
   },
   "devDependencies": {
     "@types/chance": "^1.1.2",
     "@types/node": "^12.12.21",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
+    "@types/sortablejs": "^1.15.1",
     "@typescript-eslint/eslint-plugin": "^4.27.0",
     "@typescript-eslint/parser": "^4.27.0",
     "@zeit/next-typescript": "^1.1.1",

@@ -19,6 +19,17 @@ export const usePersistState = <T>({ key, initialValue }: Props<T>): Result<T> =
           return new Date(value) as unknown as T;
         }
         return value;
+      case "tasks":
+        if (Array.isArray(value)) {
+          return value.map((v) => {
+            return {
+              ...v,
+              start: new Date(v.start),
+              end: new Date(v.date),
+            }
+          }) as unknown as T;
+        }
+        return value;
       default:
         return value;
     }

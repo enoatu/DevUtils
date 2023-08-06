@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, forwardRef } from 'react'
 import { usePersistState } from '@/hooks/usePersistState'
 import Layout from '@c/Layout'
 import { useTranslation } from 'react-i18next'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import {t} from 'i18next'
+import { ReactSortable } from "react-sortablejs";
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece]
@@ -115,6 +116,10 @@ const UserRestDaysSetting = ({ userRestDays, setUserRestDays, rawHolidays }: Use
   )
 }
 
+const generateRand = () => {
+  return Math.floor(Math.random() * 100000000)
+}
+
 type UserRestDays = { [key: string]: string }
 
 export default function CalendarManHours() {
@@ -128,20 +133,36 @@ export default function CalendarManHours() {
   const [isRestWeekend, setIsRestWeekend] = usePersistState<Boolean>({ key: 'isRestWeekend', initialValue: true })
   const [holidays, rawHolidays, isRestHoliday, setIsRestHoliday] = useHoliday()
   const [userRestDays, setUserRestDays] = usePersistState<UserRestDays>({ key: 'userRestDays', initialValue: {}})
-  const [tasks, changeTasks] = usePersistState<{name: string, days: number}[]>({
+  type Task = {
+    id: number,
+    name: string,
+    days: number,
+    start: Date,
+    end: Date,
+  }
+  const [tasks, changeTasks] = usePersistState<Task[]>({
     key: 'tasks',
     initialValue: [
       {
+        id: generateRand(),
         name: '準備1',
         days: 1,
+        start: new Date(),
+        end: new Date(),
       },
       {
+        id: generateRand(),
         name: '準備',
         days: 3,
+        start: new Date(),
+        end: new Date(),
       },
       {
+        id: generateRand(),
         name: '実行',
         days: 5,
+        start: new Date(),
+        end: new Date(),
       },
     ]
   })
@@ -162,21 +183,13 @@ export default function CalendarManHours() {
     return false
   }
 
-  type ComputedTask = {
-    name: string,
-    days: number,
-    start: Date,
-    end: Date,
-  }
-  const [computedTasks, changeComputedTasks] = useState<ComputedTask[]>([])
-
   useEffect(() => {
     let start = new Date(startDate as Date)
     let end = new Date(startDate as Date)
     const result = []
     for (const task of tasks) {
       // restDaysに含まれている日はスキップする
-      for (let i = 1; i < task.days; i++) {
+      for (let i = 0; i < task.days; i++) {
         // console.log(task.name + 'の' + (i + 1) + '日目'+ fmt(end))
         // console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
         while (true) {
@@ -188,7 +201,7 @@ export default function CalendarManHours() {
           // console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
         }
         // (次のループのため)はendを進める
-        i !== task.days && end.setDate(end.getDate() + 1)
+        i !== task.days - 1 && end.setDate(end.getDate() + 1)
       }
       result.push({...task, start: new Date(start), end: new Date(end)})
       // 開始日を1日進め、終了日を開始日と同じにする
@@ -196,8 +209,35 @@ export default function CalendarManHours() {
       start.setDate(start.getDate() + 1)
       end = new Date(start)
     }
-    changeComputedTasks(result)
+    changeTasks(result)
   }, [JSON.stringify(tasks), startDate, isRestWeekend, isRestHoliday, userRestDays])
+
+  const sortableTag = forwardRef<HTMLDivElement, any>((props, ref) => {
+    return <div ref={ref}>{props.children}</div>;
+  });
+
+  const editTaskName = (id: number, name: string) => {
+    const newTasks = tasks.map(task => {
+        if (task.id === id) {
+            return {...task, name}
+        }
+        return task
+    })
+    changeTasks(newTasks)
+  }
+  const editTaskDays = (id: number, days: string) => {
+    const newTasks = tasks.map(task => {
+        if (task.id === id) {
+            let daysNumber = Number(days)
+            if (isNaN(daysNumber) || daysNumber < 0) {
+              daysNumber = 0
+            }
+            return {...task, days: daysNumber}
+        }
+        return task
+    })
+    changeTasks(newTasks)
+  }
 
   return (
     <Layout title={t('title')}>
@@ -205,44 +245,65 @@ export default function CalendarManHours() {
         <h1 className="title">{t('title')}</h1>
         <p className="description">{t('description')}</p>
         <p className="comment">{t('now, you can change only 2 indent to 4 indent')}</p>
-        <div>
+        <div style={{ 'width': '80%' }}>
           <StartDateSetting startDate={startDate} changeStartDate={changeStartDate} />
+          <p onClick={() => setIsRestWeekend(!isRestWeekend)}>土日を休みとする: {isRestWeekend ? 'はい' : 'いいえ'}</p>
+          <p onClick={() => setIsRestHoliday(!isRestHoliday)}>祝日を休みとする: {isRestHoliday ? 'はい' : 'いいえ'}</p>
           <p>その他休み設定: {Object.keys(userRestDays).length ? Object.keys(userRestDays).forEach(key => {
             return <p>{key}</p>
           }) : '未設定'}</p>
-          <p onClick={() => setIsRestWeekend(!isRestWeekend)}>土日を休みとする: {isRestWeekend ? 'はい' : 'いいえ'}</p>
-          <p onClick={() => setIsRestHoliday(!isRestHoliday)}>祝日を休みとする: {isRestHoliday ? 'はい' : 'いいえ'}</p>
           <UserRestDaysSetting
             userRestDays={userRestDays}
             setUserRestDays={setUserRestDays}
             rawHolidays={rawHolidays}
           />
-          <ul>
-            {computedTasks.map((t) => {
-              return (
-                <li>{t.name} {t.days}日 {displayFmt(t.start)} ~ {displayFmt(t.end)}</li>
-              )
-            })}
-          </ul>
-        </div>
-        <Calendar
-          onChange={change}
-          value={value}
-          tileContent={({ date, view }) =>
-            <div className="date-box">
-              { view === 'month' && rawHolidays[fmt(date)] && <p style={{'color': 'red'}}>{rawHolidays[fmt(date)]}</p> }
-              { view === 'month' && computedTasks.map((t) => {
-                // タスク名
-                if (!isRestDay(fmt(date)) && t.start <= date && date <= t.end) {
-                  return <p>{t.name}</p>
-                }
-              })}
-              { view === 'month' && isRestWeekend && isWeekend(fmt(date)) && <p>🛌💤</p> }
-              { view === 'month' && isRestHoliday && holidays.includes(fmt(date)) && <p>🇯🇵</p> }
-              { view === 'month' && userRestDays[fmt(date)] && <p>😑💤</p> }
+          <div className="task-edit">
+            <div className="task-list task-header">
+              <div className="task-item-wrapper task-header">
+                <div className="task-item task-header">タスク名</div>
+                <div className="task-item task-header">かかる日数</div>
+                <div className="task-item task-header">開始日<br/>(自動作成)</div>
+                <div className="task-item task-header">終了日<br/>(自動作成)</div>
+                <div className="task-item task-header"></div>
+              </div>
             </div>
-          }
+            <div className="task-list">
+              <ReactSortable list={tasks} setList={(c) => changeTasks(c)}>
+                {tasks.map((t) => (
+                  <div key={t.id} className="task-item-wrapper">
+                    <div className="task-item">
+                      <input type="text" value={t.name} onChange={(e) => editTaskName(t.id, e.target.value)}/>
+                    </div>
+                    <div className="task-item">
+                      <input type="text" value={t.days} onChange={(e) => editTaskDays(t.id, e.target.value)}/>
+                    </div>
+                    <div className="task-item">{fmt(t.start)}</div>
+                    <div className="task-item">{fmt(t.end)}</div>
+                    <div className="task-item">☰</div>
+                  </div>
+                ))}
+              </ReactSortable>
+            </div>
+          </div>
+          <Calendar
+            onChange={change}
+            value={value}
+            tileContent={({ date, view }) =>
+              <div className="date-box">
+                { view === 'month' && rawHolidays[fmt(date)] && <p style={{'color': 'red'}}>{rawHolidays[fmt(date)]}</p> }
+                { view === 'month' && tasks.map((t) => {
+                  // タスク名
+                  if (!isRestDay(fmt(date)) && t.start <= date && date <= t.end) {
+                    return <p style={{ 'fontSize': 7 }}>{t.name}</p>
+                  }
+                })}
+                { view === 'month' && isRestWeekend && isWeekend(fmt(date)) && <p>🛌💤</p> }
+                { view === 'month' && isRestHoliday && holidays.includes(fmt(date)) && <p>🇯🇵</p> }
+                { view === 'month' && userRestDays[fmt(date)] && <p>😑💤</p> }
+              </div>
+            }
           />
+        </div>
       </main>
 
       <style jsx>{`
@@ -296,14 +357,61 @@ export default function CalendarManHours() {
           flex-direction: column;
           height: 100%;
         }
-
-        .source-box {
-          height: 300px;
-          width: 300px;
+        .task-edit {
+          margin-top: 10px;
+          margin-bottom: 10px;
         }
-        .result-box {
-          height: 300px;
-          width: 300px;
+        .task-list {
+          box-sizing: border-box;
+          border: 1px #ccc solid;
+          display: flex;
+          flex-direction: column;
+        }
+        .task-item-wrapper {
+          display: flex;
+        }
+        .task-header.task-item-wrapper {
+          justify-content: center;
+          text-align: center;
+          align-items: center;
+        }
+        .task-item {
+          display: flex;
+          background-color: #fff;
+          justify-content: flex-start;
+          align-items: center;
+          padding: 0 10px;
+          box-sizing: border-box;
+          width: 110px;
+          overflow: hidden;
+          flex: 3;
+        }
+        .task-item:nth-child(1) {
+          flex: 6;
+        }
+        .task-item:nth-child(1) input {
+          padding: 2px;
+          width: 100%;
+          background-color: #cff0f0;
+        }
+        .task-item:nth-child(2) {
+          flex: 2;
+        }
+        .task-item:nth-child(2) input {
+          padding: 2px;
+          width: 100%;
+          text-align: right;
+          background-color: #cff0f0;
+        }
+        .task-header.task-item:nth-child(2) {
+        }
+        .task-item:last-child {
+          justify-content: center;
+          font-size: 50px;
+          color: #ddd;
+          padding-bottom: 5px;
+          cursor: move;
+          flex: 1;
         }
       `}</style>
     </Layout>
