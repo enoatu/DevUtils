@@ -52,6 +52,8 @@ const useHoliday = (): [string[], RawHolidays, Boolean, (arg: Boolean) => void] 
   return [holidays, rawHolidays, isRestHoliday, setIsRestHoliday]
 }
 
+type UserRestDays = { [key: string]: string }
+
 export default function CalendarManHours() {
   const { t, i18n } = useTranslation('calendar-man-hours')
   i18n.addResourceBundle('ja', 'calendar-man-hours', {
@@ -62,10 +64,16 @@ export default function CalendarManHours() {
   const [startDate, changeStartDate] = usePersistState<Value>({ key: 'startDate', initialValue: new Date(new Date().toDateString()) }) // 0時にする
   const [isRestWeekend, setIsRestWeekend] = usePersistState<Boolean>({ key: 'isRestWeekend', initialValue: true })
   const [holidays, rawHolidays, isRestHoliday, setIsRestHoliday] = useHoliday()
+  const [isSettingUserRestDays, changeIsSettingUserRestDays] = useState<boolean>(false)
+  const [userRestDays, setUserRestDays] = usePersistState<UserRestDays>({ key: 'userRestDays', initialValue: {}})
   const [isSettingStartDate, changeIsSettingStartDate] = useState<boolean>(false)
   const [tasks, changeTasks] = usePersistState<{name: string, days: number}[]>({
     key: 'tasks',
     initialValue: [
+      {
+        name: '準備1',
+        days: 1,
+      },
       {
         name: '準備',
         days: 3,
@@ -76,18 +84,18 @@ export default function CalendarManHours() {
       },
     ]
   })
-
-  const restDays = {
+  const isWeekend = (date: string) => {
+    return new Date(date).getDay() === 0 || new Date(date).getDay() === 6
   }
 
   const isRestDay = (date: string) => {
-    if (isRestWeekend && (new Date(date).getDay() === 0 || new Date(date).getDay() === 6)) {
+    if (isRestWeekend && isWeekend(date)) {
       return true
     }
     if (isRestHoliday && holidays.includes(date)) {
       return true
     }
-    if (Object.keys(restDays).includes(date)) {
+    if (userRestDays[date]) {
       return true
     }
     return false
@@ -107,20 +115,20 @@ export default function CalendarManHours() {
     const result = []
     for (const task of tasks) {
       // restDaysに含まれている日はスキップする
-      [...Array(task.days).keys()].forEach((i) => {
-        console.log(task.name + 'の' + (i + 1) + '日目'+ fmt(end))
-        if (isRestDay(fmt(end))) {
-            while (isRestDay(fmt(end))) {
-             console.log(fmt(end) + 'は休みなのでスキップします')
-             end.setDate(end.getDate() + 1)
-             console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
-            }
-        } else {
+      for (let i = 1; i < task.days; i++) {
+        // console.log(task.name + 'の' + (i + 1) + '日目'+ fmt(end))
+        // console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
+        while (true) {
+          if (!isRestDay(fmt(end))) {
+            break
+          }
+          // console.log(fmt(end) + 'は休みなのでスキップします')
           end.setDate(end.getDate() + 1)
-          console.log(fmt(start) + 'から' + fmt(end))
+          // console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
         }
-      })
-      // end.setDate(end.getDate() + task.days - 1)
+        // (次のループのため)はendを進める
+        i !== task.days && end.setDate(end.getDate() + 1)
+      }
       result.push({...task, start: new Date(start), end: new Date(end)})
       // 開始日を1日進め、終了日を開始日と同じにする
       start = new Date(end)
@@ -128,7 +136,7 @@ export default function CalendarManHours() {
       end = new Date(start)
     }
     changeComputedTasks(result)
-  }, [JSON.stringify(tasks), startDate, isRestWeekend, isRestHoliday])
+  }, [JSON.stringify(tasks), startDate, isRestWeekend, isRestHoliday, userRestDays])
 
   return (
     <Layout title={t('title')}>
@@ -138,11 +146,9 @@ export default function CalendarManHours() {
         <p className="comment">{t('now, you can change only 2 indent to 4 indent')}</p>
         <div>
           <p>開始日: {startDate ? fmt(startDate as Date) : '未設定'}</p>
-          <button onClick={() =>changeIsSettingStartDate(!isSettingStartDate)}>
+          <button onClick={() => changeIsSettingStartDate(!isSettingStartDate)}>
             {isSettingStartDate ? '設定終了' : '設定開始'}
           </button>
-          <p onClick={() => setIsRestWeekend(!isRestWeekend)}>土日を休みとする: {isRestWeekend ? 'はい' : 'いいえ'}</p>
-          <p onClick={() => setIsRestHoliday(!isRestHoliday)}>祝日を休みとする: {isRestHoliday ? 'はい' : 'いいえ'}</p>
           {isSettingStartDate &&
             <Calendar
               onChange={(value, event) => {
@@ -152,6 +158,35 @@ export default function CalendarManHours() {
               value={startDate}
             />
           }
+          <p>その他休み設定: {Object.keys(userRestDays).length ? Object.keys(userRestDays).forEach(key => {
+            return <p>{key}</p>
+          }) : '未設定'}</p>
+          <button onClick={() => changeIsSettingUserRestDays(!isSettingUserRestDays)}>
+            {isSettingUserRestDays ? '設定終了' : '設定開始'}
+          </button>
+          {isSettingUserRestDays &&
+            <Calendar
+              onChange={(value, event) => {
+                if (value instanceof Date) {
+                  const date = fmt(value)
+                  if (userRestDays[date]) {
+                    const { [date]: _, ...rest } = userRestDays
+                    setUserRestDays(rest)
+                  } else {
+                    setUserRestDays({...userRestDays, [date]: '休み'})
+                  }
+                }
+              }}
+              tileContent={({ date, view }) =>
+                <div className="date-box">
+                  { view === 'month' && rawHolidays[fmt(date)] && <p style={{'color': 'red'}}>{rawHolidays[fmt(date)]}</p> }
+                  { view === 'month' && userRestDays[fmt(date)] && <p style={{'color': 'yellow'}}>😑💤</p> }
+                </div>
+              }
+            />
+          }
+          <p onClick={() => setIsRestWeekend(!isRestWeekend)}>土日を休みとする: {isRestWeekend ? 'はい' : 'いいえ'}</p>
+          <p onClick={() => setIsRestHoliday(!isRestHoliday)}>祝日を休みとする: {isRestHoliday ? 'はい' : 'いいえ'}</p>
           <ul>
             {computedTasks.map((t) => {
               return (
@@ -172,12 +207,9 @@ export default function CalendarManHours() {
                   return <p>{t.name}</p>
                 }
               })}
-              {/* view === 'month' && restDays.map((d) => {
-                // 休み
-                if (date.toString() === d) {
-                  return <p>休み</p>
-                }
-              })*/}
+              { view === 'month' && isRestWeekend && isWeekend(fmt(date)) && <p>🛌💤</p> }
+              { view === 'month' && isRestHoliday && holidays.includes(fmt(date)) && <p>🇯🇵</p> }
+              { view === 'month' && userRestDays[fmt(date)] && <p>😑💤</p> }
             </div>
           }
           />
