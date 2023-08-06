@@ -17,6 +17,11 @@ const fmt = (date: Date) => {
   const day = ('0' + date.getDate()).slice(-2)
   return `${year}/${month}/${day}`
 }
+const displayFmt = (date: Date) => {
+  const str = fmt(date)
+  const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
+  return `${str}(${dayOfWeek})`
+}
 
 type RawHolidays= {[key: string]:string }
 const useHoliday = (): [string[], RawHolidays, Boolean, (arg: Boolean) => void] => {
@@ -122,10 +127,9 @@ type Task = {
 }
 type TaskEditProps = {
   tasks: Task[],
-  changeTasks: (arg: Task[]) => void,
   updateTasks: (arg: Task[]) => void,
 }
-const TaskEdit = ({tasks, changeTasks, updateTasks}: TaskEditProps) => {
+const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
   const editTaskName = (id: number, name: string) => {
     const newTasks = tasks.map(task => {
         if (task.id === id) {
@@ -133,7 +137,7 @@ const TaskEdit = ({tasks, changeTasks, updateTasks}: TaskEditProps) => {
         }
         return task
     })
-    changeTasks(newTasks)
+    updateTasks(newTasks)
   }
   const editTaskDays = (id: number, days: string) => {
     const newTasks = tasks.map(task => {
@@ -146,24 +150,24 @@ const TaskEdit = ({tasks, changeTasks, updateTasks}: TaskEditProps) => {
         }
         return task
     })
-    changeTasks(newTasks)
+    updateTasks(newTasks)
   }
   const deleteTask = (id: number) => {
     if (tasks.length <= 1) {
       return
     }
     const newTasks = tasks.filter(task => task.id !== id)
-    changeTasks(newTasks)
+    updateTasks(newTasks)
   }
   const addTask = () => {
     const newTasks = [...tasks, {
       id: generateRand(),
       name: '',
-      days: 0,
+      days: 1,
       start: new Date(),
       end: new Date(),
     }]
-    changeTasks(newTasks)
+    updateTasks(newTasks)
   }
   return (
     <div className="task-edit">
@@ -187,8 +191,8 @@ const TaskEdit = ({tasks, changeTasks, updateTasks}: TaskEditProps) => {
               <div className="task-item">
                 <input type="text" value={t.days} onChange={(e) => editTaskDays(t.id, e.target.value)}/>
               </div>
-              <div className="task-item">{fmt(t.start)}</div>
-              <div className="task-item">{fmt(t.end)}</div>
+              <div className="task-item">{displayFmt(t.start)}</div>
+              <div className="task-item">{displayFmt(t.end)}</div>
               <div className="task-item">☰</div>
               <div className="task-item"><button className={tasks.length === 1 ? 'disable-delete-btn' : ''} onClick={() => deleteTask(t.id)}>削除</button></div>
             </div>
@@ -356,15 +360,56 @@ export default function CalendarManHours() {
       }
       result.push({...task, start: new Date(start), end: new Date(end)})
       // 開始日を1日進め、終了日を開始日と同じにする
-      start = new Date(end)
-      start.setDate(start.getDate() + 1)
-      end = new Date(start)
+      if (task.days === 0) {
+        console.log(task.name + 'の日数が0なのでスキップします')
+      } else {
+        start = new Date(end)
+        start.setDate(start.getDate() + 1)
+        end = new Date(start)
+      }
     }
     changeTasks(result)
   }
   useEffect(() => {
     updateTasks()
   }, [startDate, isRestWeekend, isRestHoliday, userRestDays])
+
+  const importData = [
+    'startDate',
+    'isRestWeekend',
+    'isRestHoliday',
+    'userRestDays',
+    'tasks',
+  ]
+  const exportLocalStorages = () => {
+    const result: { [key: string]: any } = {}
+    for (const key of importData) {
+      result[key] = JSON.parse(localStorage.getItem(key) as string)
+    }
+    const blob = new Blob([JSON.stringify(result)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    document.body.appendChild(a)
+    a.download = 'localStorages.json'
+    a.href = url
+    a.click()
+    a.remove()
+  }
+  const importLocalStorages = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return
+    }
+    const file = e.target.files[0]
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = JSON.parse(reader.result as string)
+      for (const key of importData) {
+        localStorage.setItem(key, JSON.stringify(result[key]))
+      }
+    }
+    reader.readAsText(file)
+    location.reload()
+  }
 
   return (
     <Layout title={t('title')}>
@@ -381,7 +426,7 @@ export default function CalendarManHours() {
             setUserRestDays={setUserRestDays}
             rawHolidays={rawHolidays}
           />
-          <TaskEdit tasks={tasks} changeTasks={changeTasks} updateTasks={updateTasks} />
+          <TaskEdit tasks={tasks} updateTasks={updateTasks} />
           <Calendar
             onChange={change}
             value={value}
@@ -390,7 +435,7 @@ export default function CalendarManHours() {
                 { view === 'month' && rawHolidays[fmt(date)] && <p style={{'color': 'red'}}>{rawHolidays[fmt(date)]}</p> }
                 { view === 'month' && tasks.map((t) => {
                   // タスク名
-                  if (!isRestDay(fmt(date)) && t.start <= date && date <= t.end) {
+                  if (!isRestDay(fmt(date)) && t.start <= date && date <= t.end && t.days > 0) {
                     return <p style={{ 'fontSize': 7 }}>{t.name}</p>
                   }
                 })}
@@ -401,6 +446,10 @@ export default function CalendarManHours() {
             }
           />
         </div>
+        <button onClick={exportLocalStorages}>エクスポート</button>
+        <br />
+        <p>インポート</p>
+        <input type="file" onChange={importLocalStorages} />
         <button onClick={() => {
           if (window.confirm('リセットしますか？')) {
             localStorage.clear();
