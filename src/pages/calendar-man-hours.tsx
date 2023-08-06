@@ -234,7 +234,21 @@ export default function CalendarManHours() {
   }
 
   const deleteTask = (id: number) => {
+    if (tasks.length <= 1) {
+      return
+    }
     const newTasks = tasks.filter(task => task.id !== id)
+    changeTasks(newTasks)
+  }
+
+  const addTask = () => {
+    const newTasks = [...tasks, {
+      id: generateRand(),
+      name: '',
+      days: 0,
+      start: new Date(),
+      end: new Date(),
+    }]
     changeTasks(newTasks)
   }
 
@@ -280,9 +294,12 @@ export default function CalendarManHours() {
                     <div className="task-item">{fmt(t.start)}</div>
                     <div className="task-item">{fmt(t.end)}</div>
                     <div className="task-item">☰</div>
-                    <div className="task-item"><button onClick={() => deleteTask(t.id)}>削除</button></div>
+                    <div className="task-item"><button className={tasks.length === 1 ? 'disable-delete-btn' : ''} onClick={() => deleteTask(t.id)}>削除</button></div>
                   </div>
                 ))}
+                <div className="add-task-wrapper">
+                  <button className="add-task" onClick={() => addTask()}>＋タスクを追加</button>
+                </div>
               </ReactSortable>
             </div>
           </div>
@@ -419,6 +436,24 @@ export default function CalendarManHours() {
         .task-item:nth-child(6) {
           flex: 1;
           text-align: center;
+        }
+        .disable-delete-btn {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+        .add-task-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+        }
+        .add-task {
+          width: 90%;
+          padding: 5px 10px;
+          border: 1px #ccc solid;
+          border-radius: 5px;
+          background-color: #fff;
+          cursor: pointer;
         }
 
 
