@@ -40,7 +40,8 @@ export const usePersistState = <T>({ key, initialValue }: Props<T>): Result<T> =
       if (val !== null) {
         return cast(key, val);
       }
-      return localStorage.setItem(key, JSON.stringify(defaultValue));
+      localStorage.setItem(key, JSON.stringify(defaultValue));
+      return defaultValue;
     } catch {
       return defaultValue;
     }
