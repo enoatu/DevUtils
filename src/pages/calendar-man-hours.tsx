@@ -201,6 +201,14 @@ const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
             <button className="add-task" onClick={() => addTask()}>＋タスクを追加</button>
           </div>
         </ReactSortable>
+        <div>
+        ※コピペ用
+        {tasks.map((t) => (
+          <div key={t.id} className="task-item-wrapper">
+            {t.name} {displayFmt(t.start)}〜{displayFmt(t.end)}
+          </div>
+        ))}
+        </div>
       </div>
       <style jsx>{`
         .task-edit {
@@ -233,7 +241,7 @@ const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
           flex: 3;
         }
         .task-item:nth-child(1) {
-          flex: 6;
+          flex: 10;
         }
         .task-item:nth-child(1) input {
           padding: 2px;
@@ -241,7 +249,7 @@ const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
           background-color: #cff0f0;
         }
         .task-item:nth-child(2) {
-          flex: 2;
+          flex: 3;
         }
         .task-item:nth-child(2) input {
           padding: 2px;
@@ -345,15 +353,15 @@ export default function CalendarManHours() {
     for (const task of (newTasks || tasks)) {
       // restDaysに含まれている日はスキップする
       for (let i = 0; i < task.days; i++) {
-        // console.log(task.name + 'の' + (i + 1) + '日目'+ fmt(end))
-        // console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
+        console.log(task.name + 'の' + (i + 1) + '日目'+ fmt(end))
+        console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
         while (true) {
           if (!isRestDay(fmt(end))) {
             break
           }
-          // console.log(fmt(end) + 'は休みなのでスキップします')
+          console.log(fmt(end) + 'は休みなのでスキップします')
           end.setDate(end.getDate() + 1)
-          // console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
+          console.log('スキップ後' + fmt(start) + 'から' + fmt(end))
         }
         // (次のループのため)はendを進める
         i !== task.days - 1 && end.setDate(end.getDate() + 1)
@@ -361,10 +369,18 @@ export default function CalendarManHours() {
       result.push({...task, start: new Date(start), end: new Date(end)})
       // 開始日を1日進め、終了日を開始日と同じにする
       if (task.days === 0) {
-        console.log(task.name + 'の日数が0なのでスキップします')
+        console.log(task.name + 'の日数が0なのでスキップしますs')
       } else {
         start = new Date(end)
         start.setDate(start.getDate() + 1)
+        while (true) {
+          if (!isRestDay(fmt(start))) {
+            break
+          }
+          console.log(fmt(start) + 'は休みなのでスキップしますs')
+          start.setDate(start.getDate() + 1)
+          console.log('sスキップ後' + fmt(start) + 'から' + fmt(end))
+        }
         end = new Date(start)
       }
     }
