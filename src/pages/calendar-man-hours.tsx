@@ -303,6 +303,7 @@ export default function CalendarManHours() {
   i18n.addResourceBundle('ja', 'calendar-man-hours', {
     'Change indent': 'インデント変更',
     'Export': 'エクスポート',
+    'Reset': 'リセット',
   })
 
   const [value, change] = useState<Value>(new Date())
@@ -471,7 +472,7 @@ export default function CalendarManHours() {
         <input type="file" onChange={importLocalStorages} />
         <hr />
         <div>
-        <span>リセット</span>
+        <span>{t('Reset')}</span>
           <button onClick={() => {
             if (window.confirm('リセットしますか？')) {
               localStorage.clear();
