@@ -244,23 +244,23 @@ const TaskEdit = ({tasks, updateTasks}: TaskEditProps) => {
           flex: 10;
         }
         .task-item:nth-child(1) input {
-          padding: 2px;
+          padding: 6px;
           width: 100%;
-          background-color: #cff0f0;
+          background-color: rgba(207, 240, 240, 0.5);
         }
         .task-item:nth-child(2) {
           flex: 3;
         }
         .task-item:nth-child(2) input {
-          padding: 2px;
+          padding: 6px;
           width: 100%;
           text-align: right;
-          background-color: #cff0f0;
+          background-color: rgba(207, 240, 240, 0.5);
         }
 
         .task-item:nth-child(5) {
           flex: 1;
-          font-size: 50px;
+          font-size: 30px;
           cursor: move;
           color: #ddd;
           padding-bottom: 5px;
@@ -302,6 +302,7 @@ export default function CalendarManHours() {
   const { t, i18n } = useTranslation('calendar-man-hours')
   i18n.addResourceBundle('ja', 'calendar-man-hours', {
     'Change indent': 'インデント変更',
+    'Export': 'エクスポート',
   })
 
   const [value, change] = useState<Value>(new Date())
@@ -462,18 +463,24 @@ export default function CalendarManHours() {
             }
           />
         </div>
-        <button onClick={exportLocalStorages}>エクスポート</button>
-        <br />
-        <p>インポート</p>
+        <hr />
+        <span>{t('Export')}</span>
+        <button onClick={exportLocalStorages}>実行</button>
+        <hr />
+        <span>インポート</span>
         <input type="file" onChange={importLocalStorages} />
-        <button onClick={() => {
-          if (window.confirm('リセットしますか？')) {
-            localStorage.clear();
-            location.reload();
-          }
-        }}>
-        リセット
-        </button>
+        <hr />
+        <div>
+        <span>リセット</span>
+          <button onClick={() => {
+            if (window.confirm('リセットしますか？')) {
+              localStorage.clear();
+              location.reload();
+            }
+          }}>
+          実行
+          </button>
+        </div>
       </main>
       <style jsx>{`
         .container {
