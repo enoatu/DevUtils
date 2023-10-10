@@ -3,6 +3,7 @@ import Layout from '@c/Layout'
 
 export default function HighlightStringApp() {
   const [source, setSource] = useState('dog, cat, bird')
+  const [line, setLine] = useState(6)
   const [num, setNum] = useState(6)
   const [result, setResult] = useState('')
 
@@ -11,11 +12,18 @@ export default function HighlightStringApp() {
     const modifiedNum = num - 1
     ;[...source].forEach((char, index) => {
       if (index === modifiedNum) {
-        char = `<span style="background-color: aquamarine">${char}</span>`
+        char = `<span id="target" style="background-color: aquamarine">${char}</span>`
       }
       html += char
     })
     setResult(html)
+    const target = document.getElementById('target')
+    if (!target) return
+    target.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'center',
+    })
   }
 
   const title = 'highlight-string'
